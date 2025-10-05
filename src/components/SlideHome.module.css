@@ -1,0 +1,48 @@
+/* SlideHome.module.css */
+
+.slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1; /* fica atrás do header */
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 0;
+}
+
+.slideImage {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.slideFallback {
+  width: 100%;
+  height: 100%;
+  background-color: var(--cinza);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--branco);
+}
+
+.sliderOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4); /* overlay escuro para melhorar leitura */
+  z-index: 5; /* fica acima das imagens mas abaixo do header */
+  pointer-events: none;
+}
