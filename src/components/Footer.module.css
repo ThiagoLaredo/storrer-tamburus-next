@@ -1,0 +1,53 @@
+/* Footer.module.css */
+.footer {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 20;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navFooter {
+  display: flex;
+  align-items: center;
+}
+  
+.menuFooter {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menuFooter li a {
+  color: var(--branco);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+}
+
+.menuFooter li a:hover {
+  opacity: 0.7;
+}
+
+.instagramFooter {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--amarelo-escuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.instagramFooter:hover {
+  transform: scale(1.1);
+}
