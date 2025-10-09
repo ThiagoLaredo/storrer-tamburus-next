@@ -1,0 +1,74 @@
+/* Página de Projetos */
+.projetosPage {
+    min-height: 100vh;
+    position: relative;
+    background: #000;
+  }
+  
+  /* Loading e Estados */
+  .loading, .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.2rem;
+    color: white;
+    font-family: var(--fonte-principal);
+  }
+  
+  .error {
+    color: #ff4444;
+  }
+  
+  /* Container principal da galeria */
+  .galeriaContainer {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* Estado sem projetos */
+  .semProjetos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #666;
+    font-size: 1.5rem;
+    font-family: var(--fonte-principal);
+  }
+
+  .projeto-slide .container {
+    position: absolute; 
+    z-index: 2;         
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+  }
+
+  .projeto-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 20px 10px 0;
+    position: relative;
+  }
+  
+  .projeto-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: var(--amarelo);
+    font-size: 30px;
+    transition: transform 0.3s ease;
+    transform: scale(1); /* Valor inicial padrão */
+    will-change: transform; /* Otimização de performance */
+  }
+  
+  .projeto-link:hover .projeto-plus {
+    transform: scale(1.3) !important; /* Força a escala no hover */
+  } 

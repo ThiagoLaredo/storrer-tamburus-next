@@ -10,6 +10,16 @@
   z-index: -1; /* fica atrás do header */
 }
 
+.SlideHome_slide {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  opacity: 0; /* invisível por padrão */
+  overflow: hidden;
+  background-color: var(--preto); /* cor de fundo de fallback */
+}
+
+
 .slide {
   position: absolute;
   top: 0;
@@ -17,7 +27,7 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 1s ease;
+  /* transition: opacity 1s ease; */
   z-index: 0;
 }
 
@@ -45,4 +55,6 @@
   background: rgba(0,0,0,0.4); /* overlay escuro para melhorar leitura */
   z-index: 5; /* fica acima das imagens mas abaixo do header */
   pointer-events: none;
+  opacity: 0; 
+  inset: 0;
 }

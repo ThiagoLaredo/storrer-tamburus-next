@@ -1,0 +1,88 @@
+/* styles/Filtros.module.css - ATUALIZADO */
+
+/* 🔥 REMOVE position fixed - agora fica dentro do header */
+.filtrosProjetos {
+  /* Remove: position, top, right, z-index */
+  display: flex;
+}
+
+.filtrosList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filtroBtn {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem; /* 🔥 Reduzido para caber melhor */
+  background: transparent;
+  position: relative;
+  font-family: var(--fonte-principal);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+  white-space: nowrap; /* 🔥 Impede quebra de linha */
+}
+
+/* APENAS O ELEMENTO QUE DESENHA - sem borda prévia */
+.filtroBtn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 25px;
+  clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  opacity: 0;
+  transition: 
+    clip-path 0.8s cubic-bezier(0.645, 0.045, 0.355, 1),
+    opacity 0.3s ease;
+}
+
+/* HOVER - faz o desenho aparecer e animar */
+.filtroBtn:hover::after {
+  opacity: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ATIVO - borda desenhada com destaque extra */
+.filtroBtn.ativo::after {
+  opacity: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border-width: 2px;
+}
+
+/* Remove qualquer efeito desnecessário */
+.filtroBtn:hover {
+  background: transparent;
+  transform: none;
+}
+
+.filtroBtn.ativo {
+  background: transparent;
+}
+
+.filtroBtn:focus {
+  outline: none;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .filtrosList {
+    gap: 0.5rem;
+  }
+  
+  .filtroBtn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}

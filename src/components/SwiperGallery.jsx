@@ -1,30 +1,66 @@
-"use client";
+// components/GaleriaProjetos.jsx
+'use client';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/virtual";
+import { useRef, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Virtual, Mousewheel, Keyboard, Pagination, Autoplay, EffectFade } from 'swiper/modules'; // Adicione Virtual e EffectFade
 
-export default function SwiperGallery({ items }) {
+import 'swiper/css';
+import 'swiper/css/virtual'; // Adicione este estilo
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade'; // Adicione este estilo
+
+export default function GaleriaProjetos({ projetos }) {
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    if (projetos.length > 0 && swiperRef.current) {
+      setTimeout(() => {
+        animateFirstSlide();
+        swiperRef.current.swiper.update(); // Força atualização do Swiper
+      }, 100);
+    }
+  }, [projetos]);
+
+  // ... mantenha suas funções de animação ...
+
   return (
-    <Swiper
-      direction="vertical"
-      slidesPerView={1}
-      spaceBetween={10}
-      virtual
-      style={{ height: "100vh" }}
-    >
-      {items.map((item) => (
-        <SwiperSlide key={item.sys.id}>
-          <img
-            src={item.fields.image.fields.file.url}
-            alt={item.fields.title}
-            className="w-full h-full object-cover"
-          />
-          <h2 className="absolute bottom-4 left-4 text-white text-2xl bg-black/50 p-2 rounded">
-            {item.fields.title}
-          </h2>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="galeria-projetos">
+      <Swiper
+        ref={swiperRef}
+        direction="vertical"
+        slidesPerView={1}
+        spaceBetween={0}
+        speed={1000}
+        modules={[Virtual, Mousewheel, Keyboard, Pagination, Autoplay, EffectFade]} // Adicione Virtual e EffectFade
+        virtual={true} // Habilita virtual se estiver usando
+        effect="fade" // Habilita efeito fade
+        fadeEffect={{ crossFade: true }} // Configura crossfade
+        mousewheel={{
+          enabled: true,
+          forceToAxis: true,
+          sensitivity: 1.2,
+          thresholdDelta: 5
+        }}
+        keyboard={{ 
+          enabled: true,
+          onlyInViewport: true 
+        }}
+        pagination={{ 
+          clickable: true,
+          type: 'bullets' // Especifica o tipo de paginação
+        }}
+        onSlideChange={handleSlideChange}
+        onSlideChangeTransitionStart={handleSlideChangeTransitionStart}
+        onInit={(swiper) => {
+          animateFirstSlide();
+          swiper.update(); // Atualiza o Swiper após inicialização
+        }}
+        className="projetos-swiper"
+        style={{ height: '100vh' }} // Garante altura total
+      >
+        {/* ... seus slides ... */}
+      </Swiper>
+    </div>
   );
 }

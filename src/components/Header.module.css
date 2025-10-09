@@ -1,58 +1,63 @@
+/* Header.module.css */
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 20;
-  }
-  
-  .headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 1rem;
-  }
-  
-  .logo {
-    color: var(--branco);
-    font-weight: 700;
-    font-size: 1.25rem;
-  }
-  
-  .nav {
-    display: flex;
-    align-items: center;
-  }
-  
-  .menu {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-  }
-  
-  .menu li a {
-    color: var(--branco);
-    font-weight: 500;
-    text-decoration: none;
-    transition: opacity 0.3s;
-  }
-  
-  .menu li a:hover {
-    opacity: 0.7;
-  }
-  
-  .instagram {
-    margin-left: 1rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    background-color: var(--branco);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s;
-  }
-  
-  .instagram:hover {
-    opacity: 0.7;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+.logo {
+  color: var(--branco);
+  font-weight: 400;
+  font-size: 1.65rem;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* 🔥 NOVO: Container da direita */
+.rightContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.menu {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.menu li a {
+  color: var(--branco);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.menu li a:hover {
+  opacity: 0.7;
+}
+
+.instagram {
+  margin-left: 0; /* 🔥 Remove margin-left já que usamos gap */
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--amarelo-escuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Estado inicial da animação */
+  opacity: 0;
+  transform: translateY(20px);
+}
