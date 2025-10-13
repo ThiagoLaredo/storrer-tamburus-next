@@ -9,6 +9,8 @@ const nextConfig = {
         pathname: '**', // permite qualquer caminho vindo do Contentful
       },
     ],
+    formats: ['image/avif', 'image/webp'],
+    loaderFile: './src/utils/contentfulLoader.js', // 🔥 caminho do seu loader personalizado
   },
 };
 
