@@ -85,17 +85,44 @@ export default function GaleriaProjetos({ projetos }) {
     }
   };
 
-  // Função para renderizar cada slide
-  const renderProjetoSlide = (projeto, index, onImageLoad) => (
+//   const renderProjetoSlide = (projeto, index, onImageLoad) => (
+//   <div className={styles.projetoSlide}>
+//     <OptimizedImage
+//       src={projeto.capa}
+//       alt={projeto.title}
+//       quality={index < 3 ? 75 : 65} // 🔥 Qualidade progressiva
+//       priority={index < 3} // 🔥 Apenas 3 primeiras com prioridade
+//       className={styles.projetoImagem}
+//       containerClassName={styles.imageContainer}
+//       sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw" // 🔥 Tamanhos específicos
+//       onLoad={onImageLoad}
+//     />
+//     {/* ... resto do código ... */}
+//   </div>
+// );
+
+
+// components/GaleriaProjetos.jsx
+const renderProjetoSlide = (projeto, index) => {
+  const handleImageLoad = () => {
+    // Dispara animateFirstSlide apenas para a primeira imagem
+    if (index === 0 && !animationExecuted) {
+      // Pequeno delay para garantir que o DOM atualizou
+      setTimeout(animateFirstSlide, 100);
+    }
+  };
+
+  return (
     <div className={styles.projetoSlide}>
       <OptimizedImage
         src={projeto.capa}
         alt={projeto.title}
-        quality={75}
-        priority={index < 2}
+        quality={index < 3 ? 75 : 65}
+        priority={index < 3}
         className={styles.projetoImagem}
         containerClassName={styles.imageContainer}
-        onLoad={onImageLoad} // 🔥 SIMPLES E FUNCIONAL
+        sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw"
+        onLoad={handleImageLoad} // 🔥 Controla o timing da animação
       />
       
       <div className={styles.overlay} style={{ opacity: 0 }} />
@@ -110,6 +137,7 @@ export default function GaleriaProjetos({ projetos }) {
       </Link>
     </div>
   );
+};
 
   if (projetos.length === 0) {
     return (
