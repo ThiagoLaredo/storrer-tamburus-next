@@ -1,74 +1,70 @@
-/* Página de Projetos */
+/* styles/Projetos.module.css */
+
+/* Container da página de projetos */
 .projetosPage {
-    min-height: 100vh;
-    position: relative;
-    background: #000;
-  }
-  
-  /* Loading e Estados */
-  .loading, .error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-size: 1.2rem;
-    color: white;
-    font-family: var(--fonte-principal);
-  }
-  
-  .error {
-    color: #ff4444;
-  }
-  
-  /* Container principal da galeria */
-  .galeriaContainer {
-    height: 100vh;
-    width: 100%;
-    position: relative;
-  }
-  
-  /* Estado sem projetos */
-  .semProjetos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: #666;
-    font-size: 1.5rem;
-    font-family: var(--fonte-principal);
-  }
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: transparent;
+}
 
-  .projeto-slide .container {
-    position: absolute; 
-    z-index: 2;         
-    bottom: 1rem;
-    left: 0;
-    right: 0;
-  }
+/* Loading Screen */
+.loadingContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .projeto-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: inherit;
-    padding: 10px 20px 10px 0;
-    position: relative;
+.loadingContent {
+  text-align: center;
+}
+
+.loadingLogo {
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  font-family: var(--fonte-principal);
+  letter-spacing: 0.5px;
+}
+
+.loadingSvg {
+  animation: rotate 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .projeto-plus {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    color: var(--amarelo);
-    font-size: 30px;
-    transition: transform 0.3s ease;
-    transform: scale(1); /* Valor inicial padrão */
-    will-change: transform; /* Otimização de performance */
+  50% {
+    transform: rotate(180deg);
   }
-  
-  .projeto-link:hover .projeto-plus {
-    transform: scale(1.3) !important; /* Força a escala no hover */
-  } 
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Transição suave entre páginas */
+.pageTransition {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
