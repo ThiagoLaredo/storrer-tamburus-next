@@ -85,59 +85,49 @@ export default function GaleriaProjetos({ projetos }) {
     }
   };
 
-//   const renderProjetoSlide = (projeto, index, onImageLoad) => (
-//   <div className={styles.projetoSlide}>
-//     <OptimizedImage
-//       src={projeto.capa}
-//       alt={projeto.title}
-//       quality={index < 3 ? 75 : 65} // 🔥 Qualidade progressiva
-//       priority={index < 3} // 🔥 Apenas 3 primeiras com prioridade
-//       className={styles.projetoImagem}
-//       containerClassName={styles.imageContainer}
-//       sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw" // 🔥 Tamanhos específicos
-//       onLoad={onImageLoad}
-//     />
-//     {/* ... resto do código ... */}
-//   </div>
-// );
+  // components/GaleriaProjetos.jsx
+  const renderProjetoSlide = (projeto, index) => {
+    const handleImageLoad = () => {
+      // Dispara animateFirstSlide apenas para a primeira imagem
+      if (index === 0 && !animationExecuted) {
+        // Pequeno delay para garantir que o DOM atualizou
+        setTimeout(animateFirstSlide, 100);
+      }
+    };
 
+    // Estratégia CORRETA para portfólio
+    const getQuality = (index) => {
+      // Mantém qualidade alta para todas as imagens
+      return 75; // ou 80 se preferir
+    };
 
-// components/GaleriaProjetos.jsx
-const renderProjetoSlide = (projeto, index) => {
-  const handleImageLoad = () => {
-    // Dispara animateFirstSlide apenas para a primeira imagem
-    if (index === 0 && !animationExecuted) {
-      // Pequeno delay para garantir que o DOM atualizou
-      setTimeout(animateFirstSlide, 100);
-    }
+    return (
+      <div className={styles.projetoSlide}>
+        <OptimizedImage
+          src={projeto.capa}
+          alt={projeto.title}
+          quality={75} // 🔥 QUALIDADE CONSISTENTE E ALTA
+          priority={index < 3}
+          className={styles.projetoImagem}
+          containerClassName={styles.imageContainer}
+          // sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw"
+          sizes="100vw"
+          onLoad={handleImageLoad} // 🔥 Controla o timing da animação
+        />
+        
+        <div className={styles.overlay} style={{ opacity: 0 }} />
+        
+        <Link href={`/projetos/${projeto.slug}`} className={styles.projetoLink}>
+          <h3 className={styles.projetosTitulo}>{projeto.title}</h3>
+          <span className={styles.projetoPlus}>
+            <svg width="30" height="60" viewBox="0 0 30 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.12997 16.45L8.78247 13.8L23.23 28.2425C23.4629 28.4739 23.6477 28.7491 23.7738 29.0522C23.8999 29.3553 23.9648 29.6804 23.9648 30.0087C23.9648 30.337 23.8999 30.6621 23.7738 30.9652C23.6477 31.2684 23.4629 31.5436 23.23 31.775L8.78247 46.225L6.13247 43.575L19.6925 30.0125L6.12997 16.45Z" fill="#F3ED4F"/>
+            </svg>
+          </span>
+        </Link>
+      </div>
+    );
   };
-
-  return (
-    <div className={styles.projetoSlide}>
-      <OptimizedImage
-        src={projeto.capa}
-        alt={projeto.title}
-        quality={index < 3 ? 75 : 65}
-        priority={index < 3}
-        className={styles.projetoImagem}
-        containerClassName={styles.imageContainer}
-        sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw"
-        onLoad={handleImageLoad} // 🔥 Controla o timing da animação
-      />
-      
-      <div className={styles.overlay} style={{ opacity: 0 }} />
-      
-      <Link href={`/projetos/${projeto.slug}`} className={styles.projetoLink}>
-        <h3 className={styles.projetosTitulo}>{projeto.title}</h3>
-        <span className={styles.projetoPlus}>
-          <svg width="30" height="60" viewBox="0 0 30 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.12997 16.45L8.78247 13.8L23.23 28.2425C23.4629 28.4739 23.6477 28.7491 23.7738 29.0522C23.8999 29.3553 23.9648 29.6804 23.9648 30.0087C23.9648 30.337 23.8999 30.6621 23.7738 30.9652C23.6477 31.2684 23.4629 31.5436 23.23 31.775L8.78247 46.225L6.13247 43.575L19.6925 30.0125L6.12997 16.45Z" fill="#F3ED4F"/>
-          </svg>
-        </span>
-      </Link>
-    </div>
-  );
-};
 
   if (projetos.length === 0) {
     return (
