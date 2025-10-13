@@ -12,7 +12,8 @@ export default function OptimizedImage({
   priority = false,
   className,
   containerClassName,
-  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 75vw", // 🔥 Mais realista
+  // sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 75vw", // 🔥 Mais realista
+  sizes = "100vw",
 }) {
   if (!src) return null;
 
