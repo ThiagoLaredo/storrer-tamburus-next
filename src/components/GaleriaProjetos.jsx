@@ -12,49 +12,6 @@ import styles from '../styles/GaleriaProjetos.module.css';
 export default function GaleriaProjetos({ projetos }) {
   const [animationExecuted, setAnimationExecuted] = useState(false);
 
-  // const animateFirstSlide = () => {
-  //   if (animationExecuted) return;
-    
-  //   const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
-  //   const overlay = firstSlide?.querySelector(`.${styles.overlay}`);
-    
-  //   if (!firstSlide) return;
-
-  //   const image = firstSlide.querySelector(`.${styles.projetoImagem}`);
-  //   const title = firstSlide.querySelector(`.${styles.projetosTitulo}`);
-  //   const plusIcon = firstSlide.querySelector(`.${styles.projetoPlus}`);
-    
-  //   if (image && title && plusIcon) {
-  //     setAnimationExecuted(true);
-      
-  //     const tl = gsap.timeline();
-      
-  //     tl.fromTo(
-  //       image,
-  //       { opacity: 0, scale: 1.05 },
-  //       { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }
-  //     )
-  //     .to(overlay, {
-  //       opacity: 1,
-  //       duration: 0.8,
-  //       delay: 0.3,
-  //       ease: "power2.out"
-  //     }, "-=0.8")
-  //     .fromTo([title, plusIcon], 
-  //       { y: 30, opacity: 0 },
-  //       { 
-  //         y: 0, 
-  //         opacity: 1, 
-  //         duration: 0.8, 
-  //         ease: 'power3.out', 
-  //         stagger: 0.1 
-  //       },
-  //       "-=0.3"
-  //     );
-  //   }
-  // };
-
-  
   const animateFirstSlide = () => {
   if (animationExecuted) return;
 
