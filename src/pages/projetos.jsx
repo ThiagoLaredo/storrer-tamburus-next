@@ -1,7 +1,9 @@
-// pages/projetos.jsx
+// 
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import GaleriaProjetos from '@/components/GaleriaProjetos';
 import styles from '@/styles/Projetos.module.css';
 import { getAllProjetos } from '@/services/contentful/projetos';
@@ -10,31 +12,57 @@ import MainLayout from "@/layouts/MainLayout";
 
 // Componente principal
 export default function ProjetosPage({ projetos, tipos }) {
+  const router = useRouter();
   const [filtroAtivo, setFiltroAtivo] = useState(tipos[0]?.slug || '');
 
+  // 🔥 LÊ O FILTRO DA URL QUANDO A PÁGINA CARREGA
+  useEffect(() => {
+    if (router.isReady && router.query.filtro) {
+      const filtroDaUrl = router.query.filtro;
+      // Verifica se o filtro da URL é válido
+      const filtroValido = tipos.find(tipo => tipo.slug === filtroDaUrl);
+      if (filtroValido) {
+        setFiltroAtivo(filtroDaUrl);
+      }
+    }
+  }, [router.isReady, router.query.filtro, tipos]);
+
+  // 🔥 ATUALIZA A URL QUANDO O FILTRO MUDAR (sem recarregar a página)
+  const handleFiltroChange = (novoFiltro) => {
+    setFiltroAtivo(novoFiltro);
+    
+    // Atualiza a URL sem recarregar a página
+    const params = new URLSearchParams();
+    if (novoFiltro && novoFiltro !== 'todos') {
+      params.set('filtro', novoFiltro);
+    }
+    
+    const novaUrl = params.toString() ? `/projetos?${params.toString()}` : '/projetos';
+    router.push(novaUrl, novaUrl, { shallow: true });
+  };
+
   const projetosFiltrados = projetos.filter(projeto => 
-    filtroAtivo ? projeto.tipoSlug === filtroAtivo : true
+    filtroAtivo && filtroAtivo !== 'todos' ? projeto.tipoSlug === filtroAtivo : true
   );
 
   return (
     <MainLayout 
       title="Projetos | Storrer Tamburus" 
-      hideNav={true}           // 🔥 Esconde menu normal
-      showFilters={true}       // 🔥 MOSTRA filtros no header
-      tipos={tipos}            // 🔥 Passa tipos para filtros
-      filtroAtivo={filtroAtivo} // 🔥 Passa estado
-      onFiltroChange={setFiltroAtivo} // 🔥 Passa handler
+      hideNav={true}
+      showFilters={true}
+      tipos={tipos}
+      filtroAtivo={filtroAtivo}
+      onFiltroChange={handleFiltroChange} // 🔥 Usa a nova função
       hideFooter={false}
     >
       <main className={styles.projetosPage}>
-        {/* 🔥 REMOVE o Filtros component antigo - agora está no header */}
         <GaleriaProjetos projetos={projetosFiltrados} />
       </main>
     </MainLayout>
   );
 }
 
-// Busca dados no servidor
+// Busca dados no servidor (mantido igual)
 export async function getStaticProps() {
   try {
     const [projetos, tipos] = await Promise.all([

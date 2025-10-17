@@ -1,135 +1,168 @@
-// components/GaleriaProjetos.jsx - VERSÃO FUNCIONAL
+// 
+
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import OptimizedImage from './OptimizedImage';
 import SwiperGallery from './SwiperGallery';
 import styles from '../styles/GaleriaProjetos.module.css';
 
-
 export default function GaleriaProjetos({ projetos }) {
   const [animationExecuted, setAnimationExecuted] = useState(false);
+  const [fadeClass, setFadeClass] = useState(styles.fadeIn);
+  const isFirstMount = useRef(true);
 
-  const animateFirstSlide = () => {
-  if (animationExecuted) return;
+  // 🔄 Fade + reset de animação ao trocar filtro
+  useEffect(() => {
+    if (!isFirstMount.current) {
+      setFadeClass(styles.fadeOut);
+      const timeout = setTimeout(() => {
+        setAnimationExecuted(false);
+        setFadeClass(styles.fadeIn);
 
-  const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
-  if (!firstSlide) return;
-
-  const overlay = firstSlide.querySelector(`.${styles.overlay}`);
-  const image = firstSlide.querySelector(`.${styles.projetoImagem}`);
-  const title = firstSlide.querySelector(`.${styles.projetosTitulo}`);
-  const plusIcon = firstSlide.querySelector(`.${styles.projetoPlus}`);
-
-  if (!image || !title || !plusIcon) return;
-
-  // garante que somente essa imagem comece em opacity 0 (inline, sem afetar CSS global)
-  const prevInlineOpacity = image.style.opacity; // para restaurar depois (caso haja)
-  image.style.opacity = '0';
-  // opcional: força também transform/scale inicial para evitar "piscar" de layout
-  image.style.transform = 'scale(1.05)';
-
-  const tl = gsap.timeline({
-    onComplete: () => {
-      // limpa o inline style que colocamos (volta ao normal)
-      image.style.opacity = prevInlineOpacity || '';
-      image.style.transform = '';
-      setAnimationExecuted(true);
+        // 🔥 CORREÇÃO: após o fadeIn, reanima o overlay do primeiro slide
+        setTimeout(() => {
+          reanimateFirstSlideOverlay();
+          animateFirstSlide();
+        }, 250);
+      }, 250);
+      return () => clearTimeout(timeout);
     }
-  });
+  }, [projetos]);
 
-  tl.fromTo(
-    image,
-    { opacity: 0, scale: 1.05 },
-    { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }
-  )
-  .to(overlay, {
-    opacity: 1,
-    duration: 0.8,
-    delay: 0.3,
-    ease: "power2.out"
-  }, "-=0.8")
-  .fromTo([title, plusIcon],
-    { y: 30, opacity: 0 },
-    {
+  // 🎬 Entrada inicial sincronizada com a animação de abertura da página
+  useEffect(() => {
+    if (isFirstMount.current) {
+      const fadeDelay = 0.8;
+      const imagens = document.querySelectorAll(`.${styles.projetoImagem}`);
+      const overlays = document.querySelectorAll(`.${styles.overlay}`);
+
+      // Começam invisíveis
+      gsap.set(imagens, { opacity: 0 });
+      gsap.set(overlays, { opacity: 0 });
+
+      // Fade-in suave das imagens
+      gsap.to(imagens, {
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power2.out',
+        delay: fadeDelay,
+        stagger: 0.1,
+      });
+
+      // Overlay aparece levemente depois (APENAS no carregamento inicial)
+      gsap.to(overlays, {
+        opacity: 1,
+        duration: 1.2,
+        ease: 'power2.out',
+        delay: fadeDelay + 0.4,
+        stagger: 0.1,
+      });
+
+      // Depois anima título e ícone do primeiro slide
+      const timer = setTimeout(() => {
+        animateFirstSlide(true);
+        isFirstMount.current = false;
+      }, (fadeDelay + 0.6) * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // 🔥 NOVA FUNÇÃO: Reanima apenas o overlay do primeiro slide após filtro
+  const reanimateFirstSlideOverlay = () => {
+    const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
+    if (!firstSlide) return;
+
+    const firstOverlay = firstSlide.querySelector(`.${styles.overlay}`);
+    if (firstOverlay) {
+      // Reanima o overlay do primeiro slide
+      gsap.fromTo(firstOverlay,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: 'power2.out' }
+      );
+    }
+
+    // 🔥 GARANTE que os outros overlays ficam visíveis
+    const otherOverlays = document.querySelectorAll(`.${styles.slide}:not(.swiper-slide-active) .${styles.overlay}`);
+    otherOverlays.forEach(overlay => {
+      overlay.style.opacity = '1';
+    });
+  };
+
+  const animateFirstSlide = (isInitial = false) => {
+    if (animationExecuted && isInitial) return;
+
+    const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
+    if (!firstSlide) return;
+
+    const title = firstSlide.querySelector(`.${styles.projetosTitulo}`);
+    const plusIcon = firstSlide.querySelector(`.${styles.projetoPlus}`);
+    if (!title || !plusIcon) return;
+
+    const tl = gsap.timeline({
+      onComplete: () => setAnimationExecuted(true),
+    });
+
+    // Garantir visibilidade inicial
+    gsap.set([title, plusIcon], { opacity: 0, y: 30 });
+
+    tl.to([title, plusIcon], {
       y: 0,
       opacity: 1,
-      duration: 0.8,
+      duration: 0.9,
       ease: 'power3.out',
-      stagger: 0.1
-    },
-    "-=0.3"
-  );
-};
+      stagger: 0.1,
+    });
+  };
 
   const handleSlideChange = (swiper) => {
     const activeSlide = swiper.slides[swiper.activeIndex];
-    if (activeSlide) {
-      const activeTitle = activeSlide.querySelector(`.${styles.projetosTitulo}`);
-      const activePlus = activeSlide.querySelector(`.${styles.projetoPlus}`);
-      
-      if (activeTitle && activePlus) {
-        gsap.fromTo([activeTitle, activePlus], 
-          { y: 30, opacity: 0 },
-          { 
-            y: 0, 
-            opacity: 1, 
-            duration: 0.8, 
-            ease: 'power3.out', 
-            stagger: 0.1 
-          }
-        );
-      }
+    if (!activeSlide) return;
+
+    const activeTitle = activeSlide.querySelector(`.${styles.projetosTitulo}`);
+    const activePlus = activeSlide.querySelector(`.${styles.projetoPlus}`);
+
+    if (activeTitle && activePlus) {
+      gsap.fromTo(
+        [activeTitle, activePlus],
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1 }
+      );
     }
   };
 
-  // components/GaleriaProjetos.jsx
-  const renderProjetoSlide = (projeto, index) => {
-    const handleImageLoad = () => {
-      // Dispara animateFirstSlide apenas para a primeira imagem
-      if (index === 0 && !animationExecuted) {
-        // Pequeno delay para garantir que o DOM atualizou
-        setTimeout(animateFirstSlide, 100);
-      }
-    };
+  // 🔥 RENDER SEM ALTERAÇÃO - mantém o CSS atual
+  const renderProjetoSlide = (projeto, index, handleImageLoad) => (
+    <div className={`${styles.projetoSlide} ${styles.slide}`}>
+      <OptimizedImage
+        src={projeto.capa}
+        alt={projeto.title}
+        quality={75}
+        priority={index < 3}
+        className={styles.projetoImagem}
+        containerClassName={styles.imageContainer}
+        sizes="100vw"
+        onLoad={handleImageLoad}
+      />
+      <div className={styles.overlay} />
+      <Link href={`/projeto/${projeto.slug}`} className={styles.projetoLink}>
+        <h3 className={styles.projetosTitulo}>{projeto.title}</h3>
+        <span className={styles.projetoPlus}>
+          <svg width="30" height="60" viewBox="0 0 30 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M6.13 16.45L8.78 13.8L23.23 28.24C23.46 28.47 23.65 28.75 23.77 29.05C23.9 29.36 23.96 29.68 23.96 30.01C23.96 30.34 23.9 30.66 23.77 30.97C23.65 31.27 23.46 31.54 23.23 31.77L8.78 46.22L6.13 43.57L19.69 30.01L6.13 16.45Z"
+              fill="#F3ED4F"
+            />
+          </svg>
+        </span>
+      </Link>
+    </div>
+  );
 
-    // Estratégia CORRETA para portfólio
-    const getQuality = (index) => {
-      // Mantém qualidade alta para todas as imagens
-      return 75; // ou 80 se preferir
-    };
-
-    return (
-      <div className={styles.projetoSlide}>
-        <OptimizedImage
-          src={projeto.capa}
-          alt={projeto.title}
-          quality={75} // 🔥 QUALIDADE CONSISTENTE E ALTA
-          priority={index < 3}
-          className={styles.projetoImagem}
-          containerClassName={styles.imageContainer}
-          // sizes="(max-width: 640px) 95vw, (max-width: 1024px) 80vw, 70vw"
-          sizes="100vw"
-          onLoad={handleImageLoad} // 🔥 Controla o timing da animação
-        />
-        
-        <div className={styles.overlay} style={{ opacity: 0 }} />
-        
-        <Link href={`/projetos/${projeto.slug}`} className={styles.projetoLink}>
-          <h3 className={styles.projetosTitulo}>{projeto.title}</h3>
-          <span className={styles.projetoPlus}>
-            <svg width="30" height="60" viewBox="0 0 30 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.12997 16.45L8.78247 13.8L23.23 28.2425C23.4629 28.4739 23.6477 28.7491 23.7738 29.0522C23.8999 29.3553 23.9648 29.6804 23.9648 30.0087C23.9648 30.337 23.8999 30.6621 23.7738 30.9652C23.6477 31.2684 23.4629 31.5436 23.23 31.775L8.78247 46.225L6.13247 43.575L19.6925 30.0125L6.12997 16.45Z" fill="#F3ED4F"/>
-            </svg>
-          </span>
-        </Link>
-      </div>
-    );
-  };
-
-  if (projetos.length === 0) {
+  if (!projetos?.length) {
     return (
       <div className={styles.semProjetosContainer}>
         <p className={styles.semProjetos}>Nenhum projeto encontrado</p>
@@ -138,14 +171,19 @@ export default function GaleriaProjetos({ projetos }) {
   }
 
   return (
-    <div className={styles.galeriaProjetos}>
+    <div className={`${styles.galleryWrapper} ${fadeClass}`}>
       <SwiperGallery
         items={projetos}
         renderSlide={renderProjetoSlide}
         direction="vertical"
         speed={1000}
         onSlideChange={handleSlideChange}
-        onInit={animateFirstSlide}
+        onInit={() => {
+          if (!isFirstMount.current) {
+            reanimateFirstSlideOverlay(); // 🔥 Adicionado aqui também
+            animateFirstSlide();
+          }
+        }}
       />
     </div>
   );

@@ -68,7 +68,8 @@
 }
 
 .filtroBtn.ativo {
-  background: transparent;
+  background: var(--amarelo-escuro);
+  color: var(--cinza);
 }
 
 .filtroBtn:focus {
