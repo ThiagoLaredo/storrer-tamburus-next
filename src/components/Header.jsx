@@ -50,10 +50,12 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
   return (
     <header ref={headerRef} className={styles.header}>
       <div className={styles.headerContainer}>
-        {/* Logo - SEMPRE à esquerda */}
-        <div ref={logoRef} className={styles.logo}>
-          Storrer Tamburus
-        </div>
+        {/* 🔥 LOGO COM LINK PARA HOME */}
+        <Link href="/" className={styles.logoLink}>
+          <div ref={logoRef} className={styles.logo}>
+            Storrer Tamburus
+          </div>
+        </Link>
 
         {/* Container da direita - Menu OU Filtros */}
         <div className={styles.rightContainer}>
@@ -101,8 +103,8 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
                 <Image
                   src="/instagram.svg"
                   alt="Instagram"
-                  width={24}
-                  height={24}
+                  width={20}
+                  height={20}
                   priority
                   unoptimized
                 />

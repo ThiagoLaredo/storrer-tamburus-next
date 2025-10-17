@@ -56,10 +56,12 @@ export default function Footer() {
             className={styles.instagramFooter}
           >
             <Image
-              src="/icons/instagram.svg"
+              src="/instagram.svg"
               alt="Instagram"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
+              priority
+              unoptimized
             />
           </a>
         </nav>
