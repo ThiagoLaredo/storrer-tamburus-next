@@ -1,4 +1,3 @@
-/* Header.module.css */
 .header {
   position: fixed;
   top: 0;
@@ -7,13 +6,40 @@
   z-index: 20;
 }
 
-.logo {
-  color: var(--branco);
-  font-weight: 400;
-  font-size: 1.65rem;
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
 }
 
-/* 🔥 Estilo para o link do logo */
+/* 🔥 TEMA ESCURO (default) */
+.header.dark .logo {
+  color: var(--branco);
+}
+
+.header.dark .menu li a {
+  color: var(--branco);
+}
+
+.header.dark .instagram {
+  background-color: var(--amarelo-escuro);
+}
+
+/* 🔥 TEMA CLARO (para Sobre e Contato) */
+.header.light .logo {
+  color: #333333;
+}
+
+.header.light .menu li a {
+  color: #333333;
+}
+
+.header.light .instagram {
+  background-color: var(--amarelo);
+}
+
+/* Estilos base (mantidos) */
 .logoLink {
   text-decoration: none;
   color: inherit;
@@ -25,24 +51,13 @@
   opacity: 0.7;
 }
 
-/* Mantenha os estilos existentes do logo */
 .logo {
   font-family: var(--fonte-principal);
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--branco);
-  /* outros estilos do logo... */
 }
 
-.headerContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-}
-
-/* 🔥 NOVO: Container da direita */
 .rightContainer {
   display: flex;
   align-items: center;
@@ -61,7 +76,6 @@
 }
 
 .menu li a {
-  color: var(--branco);
   font-weight: 500;
   text-decoration: none;
   transition: opacity 0.3s;
@@ -72,14 +86,231 @@
 }
 
 .instagram {
-  margin-left: 0; /* 🔥 Remove margin-left já que usamos gap */
+  margin-left: 0;
   padding: 0.5rem;
   border-radius: 50%;
-  background-color: var(--amarelo-escuro);
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Estado inicial da animação */
   opacity: 0;
   transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.instagram:hover {
+  transform: scale(1.1);
+}
+
+/* 🔥 ESTILOS DO MENU MOBILE - CORRIGIDOS */
+
+/* Botão Hamburguer */
+.mobileMenuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 100;
+}
+
+.mobileMenuButton span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: currentColor;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.mobileMenuButton.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobileMenuButton.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobileMenuButton.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay do Menu Mobile */
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--amarelo);
+  z-index: 90;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.mobileMenuOverlay.active {
+  transform: translateX(0);
+}
+
+.mobileMenuContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #666666;
+  position: relative;
+}
+
+/* Conteúdo principal - Centralizado verticalmente */
+.mobileMainContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* Filtros Mobile - Centralizado verticalmente */
+.mobileFilters {
+  text-align: center;
+}
+
+.mobileFilters ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileFilters li {
+  margin-bottom: 2rem;
+}
+
+.mobileFilterBtn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 1.4rem;
+  color: #666666;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  text-align: center;
+  width: 100%;
+  transition: color 0.3s ease;
+}
+
+.mobileFilterBtn:hover,
+.mobileFilterBtn.active {
+  color: #333333;
+}
+
+/* Menu Institucional Mobile - Centralizado verticalmente */
+.mobileMenuInstitutional {
+  text-align: center;
+}
+
+.mobileMenuInstitutional ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 3rem 0;
+}
+
+.mobileMenuInstitutional li {
+  margin-bottom: 2rem;
+}
+
+.mobileMenuInstitutional li a {
+  color: #666666;
+  text-decoration: none;
+  font-size: 1.4rem;
+  transition: color 0.3s ease;
+}
+
+.mobileMenuInstitutional li a:hover {
+  color: #333333;
+}
+
+/* 🔥 Instagram no Mobile */
+.mobileInstagram {
+  margin-top: 2rem;
+}
+
+.mobileInstagram a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #666666;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.mobileInstagram a:hover {
+  color: #333333;
+}
+
+/* Menu Institucional no Bottom - Horizontal (apenas para Projetos) */
+.mobileInstitutionalBottom {
+  border-top: 1px solid rgba(102, 102, 102, 0.3);
+  padding-top: 2rem;
+}
+
+.mobileInstitutionalBottom ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.mobileInstitutionalBottom li a {
+  color: #666666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.mobileInstitutionalBottom li a:hover {
+  color: #333333;
+}
+
+/* 🔥 RESPONSIVO */
+@media (max-width: 768px) {
+  .mobileMenuButton {
+    display: flex;
+  }
+
+  .rightContainer {
+    display: none;
+  }
+
+  /* Ajusta a cor do botão hamburguer baseado no tema */
+  .header.dark .mobileMenuButton span {
+    background-color: var(--branco);
+  }
+
+  .header.light .mobileMenuButton span {
+    background-color: #333333;
+  }
+
+  .header.dark .mobileMenuButton.active span {
+    background-color: #666666;
+  }
+
+  .header.light .mobileMenuButton.active span {
+    background-color: #666666;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobileMenuOverlay {
+    display: none;
+  }
 }

@@ -1,20 +1,16 @@
-// 
-
-
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Footer.module.css";
 
-export default function Footer() {
+export default function Footer({ theme = 'dark' }) { // 🔥 NOVA PROP
   const footerRef = useRef(null);
   const menuItemsRef = useRef([]);
   const instagramRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Timeline com delay para começar após o header (~1.5s)
       const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 }, delay: 1.5 });
 
       gsap.set([menuItemsRef.current, instagramRef.current], { opacity: 0, y: 20 });
@@ -34,7 +30,8 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className={styles.footer}>
+    // 🔥 Aplica a classe do tema
+    <footer ref={footerRef} className={`${styles.footer} ${styles[theme]}`}>
       <div className={styles.footerContainer}>
         <nav className={styles.navFooter}>
           <ul className={styles.menuFooter}>
