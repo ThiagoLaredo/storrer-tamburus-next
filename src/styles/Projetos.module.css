@@ -8,50 +8,6 @@
   background: transparent;
 }
 
-/* Loading Screen */
-.loadingContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.loadingContent {
-  text-align: center;
-}
-
-.loadingLogo {
-  font-size: 1.8rem;
-  color: #000;
-  margin-bottom: 2rem;
-  font-weight: 400;
-  font-family: var(--fonte-principal);
-  letter-spacing: 0.5px;
-}
-
-.loadingSvg {
-  animation: rotate 1.5s ease-in-out infinite;
-  transform-origin: center;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 /* Transição suave entre páginas */
 .pageTransition {
   opacity: 0;

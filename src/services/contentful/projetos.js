@@ -42,32 +42,24 @@ export async function getAllProjetos() {
     };
   });
 }
-// Função para buscar tipos de projeto
+
 export async function getTiposProjeto() {
   const response = await fetchEntries('tipoDeProjeto');
   
-  return response.items.map(item => ({
+  const tipos = response.items.map(item => ({
     id: item.sys.id,
     nome: item.fields.nome || '',
     slug: item.fields.slug || ''
   }));
+
+  // Ordenar os tipos: comercial, corporativo, residencial
+  const ordemDesejada = ['comercial', 'corporativo', 'residencial'];
+  tipos.sort((a, b) => {
+    return ordemDesejada.indexOf(a.slug) - ordemDesejada.indexOf(b.slug);
+  });
+
+  return tipos;
 }
-
-// Buscar projeto individual pelo slug com todas as informações
-// export async function getProjetoBySlug(slug) {
-//   try {
-//     const response = await fetchEntries('projeto', {
-//       'fields.slug': slug,
-//       limit: 1,
-//       include: 2 // 🔥 INCLUI entradas linked (tipoDoProjeto, galeriaDeImagens)
-//     });
-
-//     return response.items[0] || null;
-//   } catch (error) {
-//     console.error('Erro ao buscar projeto por slug:', error);
-//     return null;
-//   }
-// }
 
 // Buscar projeto individual pelo slug com todas as informações
 export async function getProjetoBySlug(slug) {

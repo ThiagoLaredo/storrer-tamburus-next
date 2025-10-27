@@ -2,10 +2,10 @@
 .projetoTitulo {
   position: fixed; /* 🔥 MUDADO para fixed - fica fixo na tela */
   bottom: 1rem;
-  left: 2rem;
+  left: 1rem;
   color: var(--branco);
   font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 600;
+  font-weight: 300;
   z-index: 100;
   display: flex;
   align-items: flex-end;
@@ -29,7 +29,7 @@
   font-size: inherit;
   font-weight: inherit;
   line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
   opacity: 0; /* 🔥 Começa invisível para animação */
 }
 

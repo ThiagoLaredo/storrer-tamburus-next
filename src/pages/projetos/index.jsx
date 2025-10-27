@@ -1,41 +1,27 @@
-import { useState, useEffect } from 'react';
+// 
+
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import GaleriaProjetos from '@/components/GaleriaProjetos';
-import styles from '@/styles/Projetos.module.css';
-import { getAllProjetos, getTiposProjeto } from '@/services/contentful/projetos';
 import MainLayout from "@/layouts/MainLayout";
+import styles from '@/styles/Projetos.module.css';
+import Loader from '@/components/Loader'; // 🔥 Importe o Loader
+import { getAllProjetos, getTiposProjeto } from '@/services/contentful/projetos';
 
 export default function ProjetosPage({ projetos, tipos }) {
   const router = useRouter();
-  const [filtroAtivo, setFiltroAtivo] = useState('todos');
 
-  // ✅ LÊ O FILTRO DA URL - página principal /projetos/
+  // 🔥 REDIRECIONAMENTO IMEDIATO para comercial
   useEffect(() => {
-    if (router.isReady) {
-      // Na página /projetos/, sempre mostra "todos"
-      setFiltroAtivo('todos');
-    }
-  }, [router.isReady]);
+    router.replace('/projetos/comercial/');
+  }, [router]);
 
-  // ✅ ATUALIZA A URL QUANDO O FILTRO MUDAR
-  const handleFiltroChange = (novoFiltro) => {
-    if (novoFiltro === 'todos') {
-      router.push('/projetos/', undefined, { shallow: true });
-    } else {
-      router.push(`/projetos/${novoFiltro}/`, undefined, { shallow: true });
-    }
-  };
-
-  const projetosFiltrados = projetos.filter(projeto => 
-    filtroAtivo === 'todos' ? true : projeto.tipoSlug === filtroAtivo
-  );
-
+  // 🔥 PÁGINA DE FALLBACK (enquanto redireciona)
   return (
     <>
       <Head>
         <title>Projetos | Storrer Tamburus</title>
-        <meta name="description" content="Explore todos os projetos de arquitetura da Storrer Tamburus. Projetos residenciais, comerciais e corporativos." />
+        <meta name="description" content="Explore todos os projetos de arquitetura da Storrer Tamburus." />
       </Head>
 
       <MainLayout 
@@ -43,12 +29,14 @@ export default function ProjetosPage({ projetos, tipos }) {
         hideNav={true}
         showFilters={true}
         tipos={tipos}
-        filtroAtivo={filtroAtivo}
-        onFiltroChange={handleFiltroChange}
+        filtroAtivo="comercial"
+        onFiltroChange={(novoFiltro) => {
+          router.push(`/projetos/${novoFiltro}/`);
+        }}
         hideFooter={false}
       >
         <main className={styles.projetosPage}>
-          <GaleriaProjetos projetos={projetosFiltrados} />
+          <Loader /> {}
         </main>
       </MainLayout>
     </>

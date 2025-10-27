@@ -68,8 +68,8 @@
 /* ===== TEXTO E LINK ===== */
 .projetoLink {
   position: absolute;
-  bottom: 1rem;
-  left: 2rem;
+  bottom: .5rem;
+  left: 1rem;
   z-index: 6;
   color: white;
   text-decoration: none;
@@ -84,7 +84,7 @@
 }
 
 .projetosTitulo {
-  font-size: 3rem;
+  font-size: 2rem;
   line-height: 1.2;
   font-weight: 300;
   color: white;

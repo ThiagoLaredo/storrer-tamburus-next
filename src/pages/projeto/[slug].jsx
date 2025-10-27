@@ -1,14 +1,35 @@
+// 
+
+
+// src/pages/projeto/[slug].jsx
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useState, useEffect } from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import { getProjetoBySlug, getAllProjetosSlugs, getTiposProjeto } from '@/services/contentful/projetos';
 import ProjetoGallery from '@/components/ProjetoGallery';
-import styles from '@/styles/Projeto.module.css';
+import Loader from '@/components/Loader';
 
 export default function ProjetoPage({ projeto, tipos }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ NAVEGAÇÃO PARA PÁGINA DE PROJETOS
+  // Controle de loading para mudanças de rota
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true);
+    const handleComplete = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, [router]);
+
   const handleFiltroChange = (novoFiltro) => {
     if (novoFiltro === 'todos') {
       router.push('/projetos/');
@@ -17,8 +38,9 @@ export default function ProjetoPage({ projeto, tipos }) {
     }
   };
 
-  if (router.isFallback) {
-    return <div>Carregando...</div>;
+  // Loading durante fallback ou transições
+  if (router.isFallback || isLoading) {
+    return <Loader />;
   }
 
   if (!projeto) {
@@ -31,7 +53,6 @@ export default function ProjetoPage({ projeto, tipos }) {
 
   const { titulo, galeriaDeImagens, tipoDoProjeto } = projeto.fields;
 
-  // ✅ DETERMINA FILTRO ATIVO
   const getFiltroAtivo = () => {
     if (!tipoDoProjeto) return '';
     const tipoId = tipoDoProjeto.sys?.id;
@@ -56,12 +77,10 @@ export default function ProjetoPage({ projeto, tipos }) {
         onFiltroChange={handleFiltroChange}
         hideFooter={false}
       >
-        <div className={styles.projetoPage}>
-          <ProjetoGallery 
-            imagens={galeriaDeImagens}
-            titulo={titulo}
-          />
-        </div>
+        <ProjetoGallery 
+          imagens={galeriaDeImagens}
+          titulo={titulo}
+        />
       </MainLayout>
     </>
   );

@@ -1,27 +1,32 @@
-// components/Header.jsx
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from './Header.module.css';
-import filtrosStyles from './Filtros.module.css'; // 🔥 Importa CSS dos filtros
+import filtrosStyles from './Filtros.module.css';
 import { gsap } from "gsap";
 
-export default function Header({ hideNav = false, showFilters = false, tipos = [], filtroAtivo, onFiltroChange }) {
+export default function Header({ 
+  hideNav = false, 
+  showFilters = false, 
+  tipos = [], 
+  filtroAtivo, 
+  onFiltroChange,
+  theme = 'dark'
+}) {
   const headerRef = useRef(null);
   const logoRef = useRef(null);
   const menuItemsRef = useRef([]);
   const instagramRef = useRef(null);
   const filtersRef = useRef([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
 
-      // Animação do logo
       tl.from(logoRef.current, { opacity: 0, y: 30 });
       
       if (!hideNav && !showFilters) {
-        // Animação do menu normal + Instagram
         gsap.set(instagramRef.current, { opacity: 0, y: 20 });
         
         tl.from(menuItemsRef.current, { 
@@ -34,7 +39,6 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
           y: 0 
         }, "-=0.6");
       } else if (showFilters) {
-        // 🔥 Animação dos filtros
         tl.from(filtersRef.current, {
           opacity: 0,
           x: 20,
@@ -47,21 +51,49 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
     return () => ctx.revert();
   }, [hideNav, showFilters]);
 
+  // 🔥 Controla o scroll quando menu mobile abre/fecha
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('mobile-menu-open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.classList.remove('mobile-menu-open');
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
-    <header ref={headerRef} className={styles.header}>
+    <header ref={headerRef} className={`${styles.header} ${styles[theme]}`}>
       <div className={styles.headerContainer}>
-        {/* 🔥 LOGO COM LINK PARA HOME */}
         <Link href="/" className={styles.logoLink}>
           <div ref={logoRef} className={styles.logo}>
             Storrer Tamburus
           </div>
         </Link>
 
-        {/* Container da direita - Menu OU Filtros */}
+        {/* 🔥 Botão do menu hamburguer para mobile */}
+        <button 
+          className={`${styles.mobileMenuButton} ${isMobileMenuOpen ? styles.active : ''}`}
+          onClick={toggleMobileMenu}
+          aria-label="Abrir menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         <div className={styles.rightContainer}>
           {showFilters ? (
-            // 🔥 MOSTRA FILTROS no canto direito (usando CSS separado)
-            <nav className={filtrosStyles.filtrosProjetos}>
+            <nav className={`${filtrosStyles.filtrosProjetos} ${filtrosStyles[theme]}`}>
               <ul className={filtrosStyles.filtrosList}>
                 {tipos.map((tipo, index) => (
                   <li key={tipo.slug}>
@@ -78,7 +110,6 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
               </ul>
             </nav>
           ) : !hideNav ? (
-            // MOSTRA MENU NORMAL + Instagram
             <>
               <nav className={styles.nav}>
                 <ul className={styles.menu}>
@@ -111,6 +142,90 @@ export default function Header({ hideNav = false, showFilters = false, tipos = [
               </a>
             </>
           ) : null}
+        </div>
+      </div>
+
+      {/* 🔥 Menu Mobile Overlay */}
+      <div className={`${styles.mobileMenuOverlay} ${isMobileMenuOpen ? styles.active : ''}`}>
+        <div className={styles.mobileMenuContent}>
+          
+          {/* Conteúdo principal - Filtros OU Menu Institucional */}
+          <div className={styles.mobileMainContent}>
+            {showFilters ? (
+              // 🔥 Filtros - vertical e centralizado (para página de Projetos)
+              <nav className={styles.mobileFilters}>
+                <ul>
+                  {tipos.map((tipo) => (
+                    <li key={tipo.slug}>
+                      <button
+                        className={`${styles.mobileFilterBtn} ${filtroAtivo === tipo.slug ? styles.active : ''}`}
+                        onClick={() => {
+                          onFiltroChange(tipo.slug);
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {tipo.nome}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ) : !hideNav ? (
+              // 🔥 Menu Institucional - vertical e centralizado (para Home, Sobre, Contato)
+              <nav className={styles.mobileMenuInstitutional}>
+                <ul>
+                  {["Projetos", "Sobre", "Contato"].map((item) => (
+                    <li key={item}>
+                      <Link 
+                        href={`/${item.toLowerCase()}`} 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                
+                {/* 🔥 Instagram no mobile */}
+                <div className={styles.mobileInstagram}>
+                  <a
+                    href="https://instagram.com/storrertamburus"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Image
+                      src="/instagram.svg"
+                      alt="Instagram"
+                      width={24}
+                      height={24}
+                      priority
+                      unoptimized
+                    />
+                    <span>Siga-nos no Instagram</span>
+                  </a>
+                </div>
+              </nav>
+            ) : null}
+          </div>
+
+          {/* 🔥 Menu Institucional no bottom - horizontal (apenas quando showFilters é true) */}
+          {showFilters && (
+            <nav className={styles.mobileInstitutionalBottom}>
+              <ul>
+                {["Projetos", "Sobre", "Contato"].map((item) => (
+                  <li key={item}>
+                    <Link 
+                      href={`/${item.toLowerCase()}`} 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
       </div>
     </header>
