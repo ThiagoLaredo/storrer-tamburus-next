@@ -31,16 +31,12 @@
 // utils/contentfulLoader.js
 export default function contentfulLoader({ src, width, quality = 75 }) {
   const baseUrl = src.split('?')[0];
-
-  // 🔥 LIMITE MÁXIMO: não gerar imagens maiores que 1920px
-  const optimizedWidth = Math.min(width, 1920);
   
   const url = new URL(baseUrl);
   url.searchParams.set('w', width.toString());
   url.searchParams.set('q', quality.toString());
   url.searchParams.set('fm', 'webp');
-  url.searchParams.set('fl', 'progressive'); // 🔥 Otimização extra
-  url.searchParams.set('fit', 'fill'); // 'fill' para cobrir toda a tela
+  url.searchParams.set('fit', 'fill');
   
   return url.toString();
 }
