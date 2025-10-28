@@ -12,8 +12,8 @@ const nextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
     loaderFile: './src/utils/contentfulLoader.js',
-    qualities: [50, 70, 75], // 🔥 Otimize as qualidades
-    deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1600, 1920], 
+    qualities: [50, 65, 75], // 🔥 Otimize as qualidades
+    deviceSizes: [640, 768, 1024, 1280, 1400, 1600], // 🔥 Remove 1920, foca em telas comuns
     imageSizes: [16, 32, 64, 128, 256],
     domains: ['images.ctfassets.net'],
   },

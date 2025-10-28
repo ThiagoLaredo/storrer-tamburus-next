@@ -8,7 +8,7 @@ import contentfulLoader from "../utils/contentfulLoader";
 export default function OptimizedImage({
   src,
   alt,
-  quality = 75, // 🔥 Reduza para 75 (balance entre qualidade e tamanho)
+  quality = 65, // 🔥 Reduza para 65 (balance entre qualidade e tamanho)
   priority = false,
   className,
   containerClassName,
