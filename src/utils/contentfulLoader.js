@@ -29,7 +29,7 @@
 // }
 
 // utils/contentfulLoader.js - VERSÃO AVIF
-export default function contentfulLoader({ src, width, quality = 65 }) {
+export default function contentfulLoader({ src, width, quality = 55 }) {
   const baseUrl = src.split('?')[0];
   
   const url = new URL(baseUrl);
