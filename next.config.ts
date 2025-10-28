@@ -6,11 +6,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.ctfassets.net',
-        pathname: '**', // permite qualquer caminho vindo do Contentful
+        pathname: '**',
       },
     ],
     formats: ['image/avif', 'image/webp'],
-    loaderFile: './src/utils/contentfulLoader.js', // 🔥 caminho do seu loader personalizado
+    loaderFile: './src/utils/contentfulLoader.js',
+    qualities: [25, 50, 70, 90], // Isso deve resolver o aviso
   },
 };
 
