@@ -28,14 +28,25 @@
 //   return url.toString();
 // }
 
-// utils/contentfulLoader.js
-export default function contentfulLoader({ src, width, quality = 75 }) {
+// utils/contentfulLoader.js - VERSÃO AVIF
+export default function contentfulLoader({ src, width, quality = 65 }) {
   const baseUrl = src.split('?')[0];
   
   const url = new URL(baseUrl);
   url.searchParams.set('w', width.toString());
   url.searchParams.set('q', quality.toString());
-  url.searchParams.set('fm', 'webp');
+  
+  // 🔥 Tente AVIF primeiro, fallback para WebP
+  const supportsAvif = typeof window !== 'undefined' 
+    ? window.chrome && window.chrome.runtime 
+    : true; // Assume suporte no server
+  
+  if (supportsAvif) {
+    url.searchParams.set('fm', 'avif');
+  } else {
+    url.searchParams.set('fm', 'webp');
+  }
+  
   url.searchParams.set('fit', 'fill');
   
   return url.toString();
