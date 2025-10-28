@@ -1,5 +1,4 @@
-
-
+// 
 
 // components/OptimizedImage.jsx
 import Image from "next/image";
@@ -8,12 +7,12 @@ import contentfulLoader from "../utils/contentfulLoader";
 export default function OptimizedImage({
   src,
   alt,
-  quality = 70, // 🔥 Reduzido de 75 para 70
+  quality = 90, // Aumente a qualidade padrão
   priority = false,
   className,
   containerClassName,
-  // sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 75vw", // 🔥 Mais realista
-  sizes = "100vw",
+  sizes = "100vw", // Para fullscreen
+  onLoad,
 }) {
   if (!src) return null;
 
@@ -28,8 +27,9 @@ export default function OptimizedImage({
         quality={quality}
         sizes={sizes}
         placeholder="blur"
-        blurDataURL={`${src}?w=30&q=10&fm=webp`} // 🔥 Placeholder menor
-        loader={contentfulLoader} // 🔥 ADICIONE ISSO
+        blurDataURL={`${src.split('?')[0]}?w=30&q=10&fm=webp`}
+        loader={contentfulLoader}
+        onLoad={onLoad}
       />
     </div>
   );
