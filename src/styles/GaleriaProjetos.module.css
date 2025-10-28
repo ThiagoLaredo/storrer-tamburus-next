@@ -151,7 +151,7 @@
 /* ===== RESPONSIVO ===== */
 @media (max-width: 768px) {
   .projetoLink {
-    bottom: 10%;
+    bottom: 12%;
     left: 1rem;
   }
 
@@ -170,7 +170,7 @@
   }
 
   .projetoLink {
-    bottom: 10;
+    bottom: 12%;
     left: 1rem;
   }
 }
