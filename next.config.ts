@@ -12,9 +12,9 @@ const nextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
     loaderFile: './src/utils/contentfulLoader.js',
-    qualities: [50, 70, 80], // 🔥 Otimize as qualidades
+    qualities: [50, 70, 75], // 🔥 Otimize as qualidades
     deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1600, 1920], 
-    imageSizes: [16, 32, 64, 128, 256, 384],
+    imageSizes: [16, 32, 64, 128, 256],
     domains: ['images.ctfassets.net'],
   },
 };
