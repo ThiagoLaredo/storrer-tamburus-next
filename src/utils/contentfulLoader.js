@@ -30,29 +30,33 @@
 
 // utils/contentfulLoader.js
 // utils/contentfulLoader.js
-export default function contentfulLoader({ src, width, quality = 50 }) { // 🔥 Padrão 50%
+// utils/contentfulLoader.js
+export default function contentfulLoader({ src, width, quality = 60 }) { // 🔥 Padrão 60%
   const baseUrl = src.split('?')[0];
   
   const url = new URL(baseUrl);
   
-  // 🔥 QUALIDADE DINÂMICA BASEADA NA LARGURA
+  // 🔥 ESTRATÉGIA INTELIGENTE POR RESOLUÇÃO
   let optimizedQuality = quality;
-  if (width <= 480) { // Mobile pequeno
-    optimizedQuality = 45; // 🔥 45% para mobile pequeno
-  } else if (width <= 768) { // Tablet
-    optimizedQuality = 55; // 🔥 55% para tablet
-  }
-  // Para desktop (> 768px) usa o quality padrão (50) ou o passado como prop
+  let optimizedWidth = width;
   
-  // 🔥 LIMITE MÁXIMO PARA MOBILE - não precisa de imagens muito grandes
-  const optimizedWidth = width <= 768 ? Math.min(width, 640) : width;
+  if (width <= 640) { // Mobile pequeno
+    optimizedQuality = 50; // 🔥 50% para mobile
+  } else if (width <= 1024) { // Tablet
+    optimizedQuality = 60; // 🔥 60% para tablet
+  } else { // Desktop
+    optimizedQuality = 70; // 🔥 70% para desktop
+  }
+  
+  // 🔥 FORMATO INTELIGENTE - AVIF para desktop, WebP para mobile
+  const useAvif = width > 1024; // AVIF apenas para desktop
   
   url.searchParams.set('w', optimizedWidth.toString());
   url.searchParams.set('q', optimizedQuality.toString());
-  url.searchParams.set('fm', 'webp'); // 🔥 Volta para WebP (mais compatível)
+  url.searchParams.set('fm', useAvif ? 'avif' : 'webp'); // 🔥 Formato adequado
   url.searchParams.set('fit', 'fill');
   
-  console.log(`📱 Mobile Otimizado: ${optimizedWidth}px, qual: ${optimizedQuality}%`);
+  console.log(`🎯 ${useAvif ? 'Desktop' : 'Mobile'}: ${optimizedWidth}px, qual: ${optimizedQuality}%, formato: ${useAvif ? 'avif' : 'webp'}`);
   
   return url.toString();
 }
