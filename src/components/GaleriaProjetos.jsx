@@ -1,3 +1,4 @@
+// components/GaleriaProjetos.jsx - VERSÃO CORRIGIDA
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -8,14 +9,36 @@ import SwiperGallery from './SwiperGallery';
 import Loader from './Loader';
 import styles from '../styles/GaleriaProjetos.module.css';
 
+// 🔥 CONFIGURAÇÃO GSAP OTIMIZADA
+if (typeof window !== 'undefined') {
+  gsap.config({
+    force3D: true,
+    autoSleep: 60,
+    nullTargetWarn: false,
+  });
+}
+
 export default function GaleriaProjetos({ projetos }) {
   const [animationExecuted, setAnimationExecuted] = useState(false);
   const [fadeClass, setFadeClass] = useState(styles.fadeIn);
   const [isLoading, setIsLoading] = useState(false);
-  const [lcpImageLoaded, setLcpImageLoaded] = useState(false); // 🔥 Novo estado para LCP
+  const [lcpImageLoaded, setLcpImageLoaded] = useState(false);
   const isFirstMount = useRef(true);
+  
+  // 🔥 REFS PARA EVITAR QUERIES NO DOM
+  const slidesRef = useRef([]);
+  const timelineRef = useRef(null);
 
-  // 🔄 Fade + reset de animação ao trocar filtro
+  // 🔥 LIMPAR TIMELINE NO UNMOUNT
+  useEffect(() => {
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+    };
+  }, []);
+
+  // 🔄 Fade + reset de animação ao trocar filtro - OTIMIZADO
   useEffect(() => {
     if (!isFirstMount.current) {
       setIsLoading(true);
@@ -36,139 +59,129 @@ export default function GaleriaProjetos({ projetos }) {
     }
   }, [projetos]);
 
-  // 🎬 Entrada inicial - NOVA ORDEM: IMAGEM → OVERLAY → ELEMENTOS
+  // 🎬 Entrada inicial - OTIMIZADA
   useEffect(() => {
     if (isFirstMount.current) {
       const fadeDelay = 0.8;
-      const imagens = document.querySelectorAll(`.${styles.projetoImagem}`);
-      const overlays = document.querySelectorAll(`.${styles.overlay}`);
-      const titles = document.querySelectorAll(`.${styles.projetosTitulo}`);
-      const plusIcons = document.querySelectorAll(`.${styles.projetoPlus}`);
 
-      // Começam todos invisíveis
-      gsap.set(imagens, { opacity: 0 });
-      gsap.set(overlays, { opacity: 0 });
-      gsap.set(titles, { opacity: 0, y: 20 });
-      gsap.set(plusIcons, { opacity: 0, y: 20 });
-
-      // 🔥 1. IMAGENS PRIMEIRO - sem delay
-      gsap.to(imagens, {
-        opacity: 1,
-        duration: 1.2,
-        ease: 'power2.out',
-        delay: fadeDelay,
-        stagger: 0.1,
-      });
-
-      // 🔥 2. OVERLAY DEPOIS - com delay após as imagens
-      gsap.to(overlays, {
-        opacity: 0.7,
-        duration: 1,
-        ease: 'power2.out',
-        delay: fadeDelay + 0.4, // 0.4s depois das imagens
-        stagger: 0.1,
-      });
-
-      // 🔥 3. TÍTULO E ÍCONE POR ÚLTIMO - apenas no slide ativo
+      // 🔥 USAR REFS EM VEZ DE QUERIES DIRETAS
+      // Aguardar um pouco para garantir que o DOM está renderizado
       const timer = setTimeout(() => {
-        animateFirstSlide(true);
-        isFirstMount.current = false;
-      }, (fadeDelay + 0.8) * 1000); // Aumentado para 0.8s após fadeDelay
+        if (slidesRef.current.length > 0) {
+          const firstSlide = slidesRef.current[0];
+          if (firstSlide) {
+            const firstImage = firstSlide.querySelector(`.${styles.projetoImagem}`);
+            const firstOverlay = firstSlide.querySelector(`.${styles.overlay}`);
+            const firstTitle = firstSlide.querySelector(`.${styles.projetosTitulo}`);
+            const firstPlus = firstSlide.querySelector(`.${styles.projetoPlus}`);
+
+            if (firstImage && firstOverlay && firstTitle && firstPlus) {
+              // 🔥 TIMELINE ÚNICA - MAIS EFICIENTE
+              const tl = gsap.timeline({ delay: fadeDelay });
+              
+              tl
+                .set([firstImage, firstOverlay, firstTitle, firstPlus], { opacity: 0 })
+                .to(firstImage, { opacity: 1, duration: 1.2, ease: 'power2.out' })
+                .to(firstOverlay, { opacity: 0.7, duration: 1, ease: 'power2.out' }, '-=0.8')
+                .to([firstTitle, firstPlus], { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.9, 
+                  ease: 'power3.out',
+                  stagger: 0.1 
+                }, '-=0.4');
+
+              timelineRef.current = tl;
+            }
+          }
+
+          animateFirstSlide(true);
+          isFirstMount.current = false;
+        }
+      }, 100); // Pequeno delay para garantir renderização
       
       return () => clearTimeout(timer);
     }
   }, []);
 
-  // 🔥 FUNÇÃO OTIMIZADA: Reanima na ordem correta após filtro
+  // 🔥 FUNÇÃO OTIMIZADA: Reanima sem reflow
   const reanimateFirstSlideOverlay = () => {
-    const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
+    const firstSlide = slidesRef.current[0];
     if (!firstSlide) return;
 
-    const firstImage = firstSlide.querySelector(`.${styles.projetoImagem}`);
     const firstOverlay = firstSlide.querySelector(`.${styles.overlay}`);
-
-    if (firstImage && firstOverlay) {
-      // 1. Garante que a imagem está visível
-      gsap.set(firstImage, { opacity: 1 });
-      
-      // 2. Anima o overlay depois
-      gsap.fromTo(firstOverlay,
-        { opacity: 0 },
-        { 
-          opacity: 0.7, 
-          duration: 0.8, 
-          ease: 'power2.out',
-          delay: 0.2 // Pequeno delay após a imagem
-        }
-      );
+    if (firstOverlay) {
+      // 🔥 ANIMAÇÃO SIMPLES SEM LAYOUT THRASHING
+      gsap.to(firstOverlay, { 
+        opacity: 0.7, 
+        duration: 0.8, 
+        ease: 'power2.out',
+        overwrite: true // 🔥 EVITA CONFLITOS
+      });
     }
-
-    // Outros overlays mantêm opacidade
-    const otherOverlays = document.querySelectorAll(`.${styles.slide}:not(.swiper-slide-active) .${styles.overlay}`);
-    otherOverlays.forEach(overlay => {
-      overlay.style.opacity = '0.7';
-    });
   };
 
   const animateFirstSlide = (isInitial = false) => {
     if (animationExecuted && isInitial) return;
 
-    const firstSlide = document.querySelector(`.${styles.slide}.swiper-slide-active`);
+    const firstSlide = slidesRef.current[0];
     if (!firstSlide) return;
 
     const title = firstSlide.querySelector(`.${styles.projetosTitulo}`);
     const plusIcon = firstSlide.querySelector(`.${styles.projetoPlus}`);
     if (!title || !plusIcon) return;
 
+    // 🔥 TIMELINE OTIMIZADA
     const tl = gsap.timeline({
       onComplete: () => setAnimationExecuted(true),
     });
 
-    // Garantir visibilidade inicial
-    gsap.set([title, plusIcon], { opacity: 0, y: 30 });
-
-    // 🔥 ANIMAÇÃO COM DELAY - depois do overlay
     tl.to([title, plusIcon], {
       y: 0,
       opacity: 1,
       duration: 0.9,
       ease: 'power3.out',
       stagger: 0.1,
-      delay: 0.3 // Delay após o overlay
+      delay: 0.3
     });
+
+    timelineRef.current = tl;
   };
 
   const handleSlideChange = (swiper) => {
+    // 🔥 DEBOUNCE PARA EVITAR MUITOS REFLOWS
+    if (swiper.__lastChange && Date.now() - swiper.__lastChange < 300) return;
+    swiper.__lastChange = Date.now();
+
     const activeSlide = swiper.slides[swiper.activeIndex];
     if (!activeSlide) return;
 
-    const activeImage = activeSlide.querySelector(`.${styles.projetoImagem}`);
     const activeOverlay = activeSlide.querySelector(`.${styles.overlay}`);
     const activeTitle = activeSlide.querySelector(`.${styles.projetosTitulo}`);
     const activePlus = activeSlide.querySelector(`.${styles.projetoPlus}`);
 
-    if (activeImage && activeOverlay && activeTitle && activePlus) {
-      const tl = gsap.timeline();
+    if (activeOverlay && activeTitle && activePlus) {
+      // 🔥 ANIMAÇÃO MAIS SIMPLES
+      gsap.killTweensOf([activeOverlay, activeTitle, activePlus]);
       
-      // 🔥 ORDEM NA TROCA DE SLIDE: Imagem → Overlay → Título/Ícone
-      tl
-        .set(activeImage, { opacity: 1 }) // Imagem já está visível
-        .fromTo(activeOverlay,
-          { opacity: 0 },
-          { opacity: 0.7, duration: 0.6, ease: 'power2.out' },
-          "-=0.1" // Começa ligeiramente antes do final da imagem
-        )
-        .fromTo(
-          [activeTitle, activePlus],
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1 },
-          "-=0.2" // Começa durante a animação do overlay
-        );
+      gsap.set([activeTitle, activePlus], { y: 30, opacity: 0 });
+      gsap.set(activeOverlay, { opacity: 0 });
+      
+      gsap.to(activeOverlay, { opacity: 0.7, duration: 0.6, ease: 'power2.out' });
+      gsap.to([activeTitle, activePlus], { 
+        y: 0, 
+        opacity: 1, 
+        duration: 0.8, 
+        ease: 'power3.out', 
+        stagger: 0.1,
+        delay: 0.1 
+      });
     }
   };
 
-  // Função para pré-carregar overlays durante o loading
+  // 🔥 ADICIONAR FUNÇÃO handleGalleryInit QUE ESTAVA FALTANDO
   const handleGalleryInit = (swiper) => {
+    // Inicializar overlays com opacidade
     const overlays = document.querySelectorAll(`.${styles.overlay}`);
     overlays.forEach(overlay => {
       overlay.style.opacity = '0.7';
@@ -180,32 +193,30 @@ export default function GaleriaProjetos({ projetos }) {
     }
   };
 
-    const handleImageLoad = () => {
-    // 🔥 Marcar que a imagem LCP (a primeira) carregou
+  const handleImageLoad = () => {
     setLcpImageLoaded(true);
-    console.log('✅ Imagem LCP carregada');
-    
-    // Opcional: Disparar analytics de performance
-    if (window.performance) {
-      const lcpEntry = performance.getEntriesByType('largest-contentful-paint');
-      if (lcpEntry.length > 0) {
-        console.log('LCP:', lcpEntry[0].startTime);
-      }
-    }
   };
 
+  // 🔥 RENDER OTIMIZADO COM REFS
   const renderProjetoSlide = (projeto, index) => (
-    <div className={`${styles.projetoSlide} ${styles.slide}`}>
+    <div 
+      ref={el => {
+        if (el) {
+          slidesRef.current[index] = el;
+        }
+      }}
+      className={`${styles.projetoSlide} ${styles.slide}`}
+    >
       <OptimizedImage
         src={projeto.capa}
         alt={projeto.title}
-        quality={65} // 🔥 Qualidade única já que são fullscreen
-        priority={index === 0} // 🔥 APENAS a primeira com priority
-        loading={index === 0 ? "eager" : "lazy"} // 🔥 Primeira eager, resto lazy
+        quality={75}
+        priority={index === 0}
+        loading={index === 0 ? "eager" : "lazy"}
         className={styles.projetoImagem}
         containerClassName={styles.imageContainer}
-        sizes="100vw" // 🔥 Como é fullscreen, sempre 100vw
-        onLoad={index === 0 ? handleImageLoad : undefined} // 🔥 Só a primeira
+        sizes="100vw"
+        onLoad={index === 0 ? handleImageLoad : undefined}
       />
       <div className={styles.overlay} />
       <Link href={`/projeto/${projeto.slug}`} className={styles.projetoLink}>
@@ -240,7 +251,7 @@ export default function GaleriaProjetos({ projetos }) {
           direction="vertical"
           speed={1000}
           onSlideChange={handleSlideChange}
-          onInit={handleGalleryInit}
+          onInit={handleGalleryInit} 
         />
       </div>
     </>
