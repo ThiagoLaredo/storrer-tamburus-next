@@ -12,6 +12,7 @@ export default function GaleriaProjetos({ projetos }) {
   const [animationExecuted, setAnimationExecuted] = useState(false);
   const [fadeClass, setFadeClass] = useState(styles.fadeIn);
   const [isLoading, setIsLoading] = useState(false);
+  const [lcpImageLoaded, setLcpImageLoaded] = useState(false); // 🔥 Novo estado para LCP
   const isFirstMount = useRef(true);
 
   // 🔄 Fade + reset de animação ao trocar filtro
@@ -179,8 +180,18 @@ export default function GaleriaProjetos({ projetos }) {
     }
   };
 
-  const handleImageLoad = () => {
-    // Lógica opcional para carregamento de imagens
+    const handleImageLoad = () => {
+    // 🔥 Marcar que a imagem LCP (a primeira) carregou
+    setLcpImageLoaded(true);
+    console.log('✅ Imagem LCP carregada');
+    
+    // Opcional: Disparar analytics de performance
+    if (window.performance) {
+      const lcpEntry = performance.getEntriesByType('largest-contentful-paint');
+      if (lcpEntry.length > 0) {
+        console.log('LCP:', lcpEntry[0].startTime);
+      }
+    }
   };
 
   const renderProjetoSlide = (projeto, index) => (
@@ -188,12 +199,13 @@ export default function GaleriaProjetos({ projetos }) {
       <OptimizedImage
         src={projeto.capa}
         alt={projeto.title}
-        quality={90} // 🔥 Aumente para 90
-        priority={index < 3}
+        quality={80} // 🔥 Qualidade única já que são fullscreen
+        priority={index === 0} // 🔥 APENAS a primeira com priority
+        loading={index === 0 ? "eager" : "lazy"} // 🔥 Primeira eager, resto lazy
         className={styles.projetoImagem}
         containerClassName={styles.imageContainer}
-        sizes="100vw" // 🔥 Para fullscreen, use 100vw
-        onLoad={handleImageLoad}
+        sizes="100vw" // 🔥 Como é fullscreen, sempre 100vw
+        onLoad={index === 0 ? handleImageLoad : undefined} // 🔥 Só a primeira
       />
       <div className={styles.overlay} />
       <Link href={`/projeto/${projeto.slug}`} className={styles.projetoLink}>

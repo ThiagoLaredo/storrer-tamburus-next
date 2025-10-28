@@ -29,20 +29,14 @@
 // }
 
 // utils/contentfulLoader.js
-export default function contentfulLoader({ src, width, quality = 90 }) {
+export default function contentfulLoader({ src, width, quality = 80 }) {
   const baseUrl = src.split('?')[0];
   
   const url = new URL(baseUrl);
   url.searchParams.set('w', width.toString());
   url.searchParams.set('q', quality.toString());
   url.searchParams.set('fm', 'webp');
-  // Remova o fit='fill' para não distorcer, use 'scale' para manter proporção
-  url.searchParams.set('fit', 'scale');
-  
-  // 🔥 DEBUG TEMPORÁRIO
-  if (width > 1000) {
-    console.log(`📸 Carregando imagem: ${width}px, qualidade: ${quality}`, url.toString());
-  }
+  url.searchParams.set('fit', 'fill'); // 'fill' para cobrir toda a tela
   
   return url.toString();
 }
