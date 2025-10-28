@@ -4,14 +4,15 @@
 import Image from "next/image";
 import contentfulLoader from "../utils/contentfulLoader";
 
+// components/OptimizedImage.jsx
 export default function OptimizedImage({
   src,
   alt,
-  quality = 90, // Aumente a qualidade padrão
+  quality = 75, // 🔥 Reduza para 75 (balance entre qualidade e tamanho)
   priority = false,
   className,
   containerClassName,
-  sizes = "100vw", // Para fullscreen
+  sizes = "100vw",
   onLoad,
 }) {
   if (!src) return null;
@@ -27,7 +28,7 @@ export default function OptimizedImage({
         quality={quality}
         sizes={sizes}
         placeholder="blur"
-        blurDataURL={`${src.split('?')[0]}?w=30&q=10&fm=webp`}
+        blurDataURL={`${src.split('?')[0]}?w=50&q=30&fm=webp`}
         loader={contentfulLoader}
         onLoad={onLoad}
       />
