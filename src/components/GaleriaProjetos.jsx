@@ -199,7 +199,7 @@ export default function GaleriaProjetos({ projetos }) {
       <OptimizedImage
         src={projeto.capa}
         alt={projeto.title}
-        quality={80} // 🔥 Qualidade única já que são fullscreen
+        quality={75} // 🔥 Qualidade única já que são fullscreen
         priority={index === 0} // 🔥 APENAS a primeira com priority
         loading={index === 0 ? "eager" : "lazy"} // 🔥 Primeira eager, resto lazy
         className={styles.projetoImagem}
