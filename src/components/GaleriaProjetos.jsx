@@ -215,7 +215,7 @@ export default function GaleriaProjetos({ projetos }) {
         loading={index === 0 ? "eager" : "lazy"}
         className={styles.projetoImagem}
         containerClassName={styles.imageContainer}
-        sizes="100vw"
+        sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 100vw" 
         onLoad={index === 0 ? handleImageLoad : undefined}
       />
       <div className={styles.overlay} />

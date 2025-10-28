@@ -109,8 +109,9 @@ export default function SlideHome({ projetosDestaque }) {
               alt={projeto.title || "Projeto sem título"}
               fill
               className={styles.slideImage}
+              quality={55}
               priority={index === 0} // prioridade na primeira imagem
-              sizes="100vw"
+              sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 100vw"
             />
           ) : (
             <div className={styles.slideFallback}>Sem imagem</div>

@@ -25,7 +25,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     loaderFile: './src/utils/contentfulLoader.js',
     qualities: [50, 70, 75],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1600],
+    deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1400, 1600],
     imageSizes: [16, 32, 64, 128, 256],
     domains: ['images.ctfassets.net'],
   },
