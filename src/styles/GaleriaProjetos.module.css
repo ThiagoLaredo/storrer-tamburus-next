@@ -48,6 +48,14 @@
   transition: opacity 0.6s ease;
 }
 
+/* styles/GaleriaProjetos.module.css */
+.projetoImagem, .overlay, .projetosTitulo, .projetoPlus {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  will-change: transform, opacity;
+}
+
 /* ===== FADES DO WRAPPER ===== */
 .galleryWrapper {
   opacity: 0;

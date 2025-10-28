@@ -2,18 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   
-  // 🔥 ADICIONE ESTAS CONFIGURAÇÕES
+  // 🔥 CONFIGURAÇÃO MODERNA SIMPLIFICADA
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // 🔥 CONFIGURAÇÃO MODERNA - remove polyfills desnecessários
+  // 🔥 CONFIGURAÇÃO PARA BROWSERS MODERNOS
   experimental: {
     legacyBrowsers: false,
     browsersListForSwc: true,
   },
-  
+
   images: {
     remotePatterns: [
       {
@@ -25,7 +25,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     loaderFile: './src/utils/contentfulLoader.js',
     qualities: [50, 70, 75],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1600, 1920],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1400, 1600],
     imageSizes: [16, 32, 64, 128, 256],
     domains: ['images.ctfassets.net'],
   },
