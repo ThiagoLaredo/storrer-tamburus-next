@@ -1,18 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
-  // 🔥 CONFIGURAÇÃO MODERNA SIMPLIFICADA
-  swcMinify: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  
-  // 🔥 CONFIGURAÇÃO PARA BROWSERS MODERNOS
-  experimental: {
-    legacyBrowsers: false,
-    browsersListForSwc: true,
-  },
 
   images: {
     remotePatterns: [
@@ -22,14 +10,18 @@ const nextConfig = {
         pathname: '**',
       },
     ],
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/webp', 'image/avif'],
     loaderFile: './src/utils/contentfulLoader.js',
-    // qualities: [40, 60, 70],
-    qualities: [35, 40, 55], 
-    deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1400, 1600],
+    qualities: [30, 45, 65, 75], 
+    deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1400, 1600, 1920],
     imageSizes: [16, 32, 64, 128, 256],
     domains: ['images.ctfassets.net'],
   },
 };
 
-module.exports = nextConfig;
+// 🔥 ADICIONE o bundle analyzer condicionalmente
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer(nextConfig);

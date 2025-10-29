@@ -235,7 +235,7 @@ export default function SlideHome({ projetosDestaque }) {
             <OptimizedImage // 🔥 SUBSTITUI NextImage POR OptimizedImage
               src={projeto.capa}
               alt={projeto.title || "Projeto sem título"}
-              quality={40} // 🔥 REDUZIDO PARA 50%
+              quality={40} 
               priority={index === 0}
               className={styles.slideImage}
               // 🔥 REMOVA containerClassName - deixa o OptimizedImage criar seu próprio container

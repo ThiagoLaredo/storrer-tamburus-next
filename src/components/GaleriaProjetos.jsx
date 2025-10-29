@@ -210,7 +210,7 @@ export default function GaleriaProjetos({ projetos }) {
       <OptimizedImage
         src={projeto.capa}
         alt={projeto.title}
-        quality={75}
+        quality={55}
         priority={index === 0}
         loading={index === 0 ? "eager" : "lazy"}
         className={styles.projetoImagem}
