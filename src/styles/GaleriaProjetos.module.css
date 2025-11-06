@@ -164,10 +164,11 @@
   .projetoLink {
     bottom: 10%;
     left: 1rem;
+    gap: .3rem;
   }
 
   .projetosTitulo {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .pagination {

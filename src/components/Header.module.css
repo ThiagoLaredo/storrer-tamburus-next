@@ -283,6 +283,12 @@
 
 /* 🔥 RESPONSIVO */
 @media (max-width: 768px) {
+
+    .header.specialPage {
+    background: white !important;
+    border-bottom: 1px solid #e5e5e5 !important; /* cinza claro */
+  }
+  
   .mobileMenuButton {
     display: flex;
   }

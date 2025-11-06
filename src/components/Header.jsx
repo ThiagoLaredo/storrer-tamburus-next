@@ -1,4 +1,8 @@
+// 
+
+
 import { useRef, useEffect, useState } from "react";
+import { useRouter } from "next/router"; // 🔥 ADICIONE ESTE IMPORT
 import Link from "next/link";
 import Image from "next/image";
 import styles from './Header.module.css';
@@ -13,12 +17,18 @@ export default function Header({
   onFiltroChange,
   theme = 'dark'
 }) {
+  const router = useRouter(); // 🔥 HOOK DO ROUTER
   const headerRef = useRef(null);
   const logoRef = useRef(null);
   const menuItemsRef = useRef([]);
   const instagramRef = useRef(null);
   const filtersRef = useRef([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // 🔥 DETECTA PÁGINAS ESPECIAIS (Contato e Sobre)
+  const isContactPage = router.pathname === '/contato';
+  const isAboutPage = router.pathname === '/sobre';
+  const isSpecialPage = isContactPage || isAboutPage;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -72,7 +82,16 @@ export default function Header({
   };
 
   return (
-    <header ref={headerRef} className={`${styles.header} ${styles[theme]}`}>
+    <header 
+      ref={headerRef} 
+      className={`${styles.header} ${styles[theme]} ${
+        isSpecialPage ? styles.specialPage : ''
+      } ${
+        isContactPage ? styles.contactPage : ''
+      } ${
+        isAboutPage ? styles.aboutPage : ''
+      }`}
+    >
       <div className={styles.headerContainer}>
         <Link href="/" className={styles.logoLink}>
           <div ref={logoRef} className={styles.logo}>

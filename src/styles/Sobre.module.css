@@ -21,3 +21,22 @@
   line-height: 1.6;
   color: #666; /* Cinza médio */
 }
+
+@media (max-width: 768px) {
+
+  .sobreContainer {
+    overflow: auto;
+    padding: 0 1rem;
+    height: auto;
+    padding-top: 100px;
+  }
+
+  .titulo {
+    font-size: 1.5rem;
+    line-height: normal;
+  }
+
+  .texto {
+    font-size: 1rem;
+  }
+}
