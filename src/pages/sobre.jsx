@@ -17,7 +17,7 @@ export default function Sobre() {
       >
         <div className={styles.sobreContainer}>
           <div className={styles.sobreContent}>
-            <h1 className={styles.titulo}>Storrer Tamburus</h1>
+            <h1 className={styles.titulo}>Sobre</h1>
             <div className={styles.texto}>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis eget urna

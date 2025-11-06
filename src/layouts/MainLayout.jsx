@@ -14,7 +14,8 @@ export default function MainLayout({
   theme = 'dark' // 🔥 NOVA PROP: 'dark' ou 'light'
 }) {
   return (
-    <div className="flex flex-col flex-center min-h-screen">
+    // <div className="flex flex-col flex-center min-h-screen">
+    <div>
       <Head>
         <title>{title}</title>
         <meta name="description" content="Estúdio Storrer Tamburus" />

@@ -4,13 +4,14 @@
   bottom: 1rem;
   left: 1rem;
   color: var(--branco);
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: 2rem;
   font-weight: 300;
   z-index: 100;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 1rem;
   pointer-events: none;
+  z-index: 1;
 }
 
 .tituloBarra {
@@ -186,7 +187,8 @@
   }
 
   .tituloTexto {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.1;
   }
 
   .pagination {
@@ -196,9 +198,13 @@
 
 @media (max-width: 480px) {
   .projetoTitulo {
-    left: 1rem;
+    left: 1.2rem;
     bottom: 10%;
     gap: 0.5rem;
+  }
+
+   .tituloTexto {
+    font-size: 1.5rem;
   }
 
   .tituloBarra {
