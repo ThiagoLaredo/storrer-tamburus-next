@@ -1,8 +1,5 @@
-// 
-
-
 import { useRef, useEffect, useState } from "react";
-import { useRouter } from "next/router"; // 🔥 ADICIONE ESTE IMPORT
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import styles from './Header.module.css';
@@ -17,49 +14,82 @@ export default function Header({
   onFiltroChange,
   theme = 'dark'
 }) {
-  const router = useRouter(); // 🔥 HOOK DO ROUTER
+  const router = useRouter();
   const headerRef = useRef(null);
   const logoRef = useRef(null);
   const menuItemsRef = useRef([]);
   const instagramRef = useRef(null);
   const filtersRef = useRef([]);
+  const hamburgerRef = useRef(null);
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // 🔥 DETECTA PÁGINAS ESPECIAIS (Contato e Sobre)
   const isContactPage = router.pathname === '/contato';
   const isAboutPage = router.pathname === '/sobre';
   const isSpecialPage = isContactPage || isAboutPage;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
+      // 🔥 TIMELINE MAIS RÁPIDA MAS MANTENDO A ANIMAÇÃO
+      const tl = gsap.timeline({ 
+        defaults: { 
+          ease: "power2.out",
+          duration: 0.6
+        }
+      });
 
-      tl.from(logoRef.current, { opacity: 0, y: 30 });
+      // 1. Logo - animação rápida
+      tl.from(logoRef.current, { 
+        opacity: 0, 
+        y: 20,
+        duration: 0.5
+      });
       
-      if (!hideNav && !showFilters) {
-        gsap.set(instagramRef.current, { opacity: 0, y: 20 });
-        
-        tl.from(menuItemsRef.current, { 
+      // 2. Hamburguer - animação simultânea
+      if (hamburgerRef.current) {
+        tl.from(hamburgerRef.current, { 
           opacity: 0, 
-          y: 20, 
-          stagger: 0.15 
-        }, "-=0.3")
-        .to(instagramRef.current, { 
-          opacity: 1, 
-          y: 0 
-        }, "-=0.6");
-      } else if (showFilters) {
-        tl.from(filtersRef.current, {
-          opacity: 0,
-          x: 20,
-          stagger: 0.1,
-          duration: 0.8
+          x: 15,
+          duration: 0.5
         }, "-=0.3");
       }
+      
+      // 3. Menu desktop ou filtros
+      if (!hideNav && !showFilters) {
+        // Garante que o Instagram comece invisível
+        if (instagramRef.current) {
+          gsap.set(instagramRef.current, { opacity: 0, y: 10 });
+        }
+        
+        // Menu items - animação rápida
+        tl.from(menuItemsRef.current.filter(el => el !== null), { 
+          opacity: 0, 
+          y: 15,
+          duration: 0.4,
+          stagger: 0.08
+        }, "-=0.2")
+        
+        // Instagram - animação rápida
+        .to(instagramRef.current, { 
+          opacity: 1, 
+          y: 0,
+          duration: 0.4
+        }, "-=0.3");
+        
+      } else if (showFilters) {
+        // Filtros - animação rápida
+        tl.from(filtersRef.current.filter(el => el !== null), {
+          opacity: 0,
+          x: 15,
+          duration: 0.4,
+          stagger: 0.06
+        }, "-=0.2");
+      }
+
     }, headerRef);
 
     return () => ctx.revert();
-  }, [hideNav, showFilters]);
+  }, [hideNav, showFilters]); // 🔥 MANTIVE AS DEPENDÊNCIAS ORIGINAIS
 
   // 🔥 Controla o scroll quando menu mobile abre/fecha
   useEffect(() => {
@@ -99,8 +129,8 @@ export default function Header({
           </div>
         </Link>
 
-        {/* 🔥 Botão do menu hamburguer para mobile */}
         <button 
+          ref={hamburgerRef}
           className={`${styles.mobileMenuButton} ${isMobileMenuOpen ? styles.active : ''}`}
           onClick={toggleMobileMenu}
           aria-label="Abrir menu"
@@ -164,14 +194,12 @@ export default function Header({
         </div>
       </div>
 
-      {/* 🔥 Menu Mobile Overlay */}
+      {/* Menu Mobile Overlay */}
       <div className={`${styles.mobileMenuOverlay} ${isMobileMenuOpen ? styles.active : ''}`}>
         <div className={styles.mobileMenuContent}>
           
-          {/* Conteúdo principal - Filtros OU Menu Institucional */}
           <div className={styles.mobileMainContent}>
             {showFilters ? (
-              // 🔥 Filtros - vertical e centralizado (para página de Projetos)
               <nav className={styles.mobileFilters}>
                 <ul>
                   {tipos.map((tipo) => (
@@ -190,7 +218,6 @@ export default function Header({
                 </ul>
               </nav>
             ) : !hideNav ? (
-              // 🔥 Menu Institucional - vertical e centralizado (para Home, Sobre, Contato)
               <nav className={styles.mobileMenuInstitutional}>
                 <ul>
                   {["Projetos", "Sobre", "Contato"].map((item) => (
@@ -205,7 +232,6 @@ export default function Header({
                   ))}
                 </ul>
                 
-                {/* 🔥 Instagram no mobile */}
                 <div className={styles.mobileInstagram}>
                   <a
                     href="https://instagram.com/storrertamburus"
@@ -228,7 +254,6 @@ export default function Header({
             ) : null}
           </div>
 
-          {/* 🔥 Menu Institucional no bottom - horizontal (apenas quando showFilters é true) */}
           {showFilters && (
             <nav className={styles.mobileInstitutionalBottom}>
               <ul>
