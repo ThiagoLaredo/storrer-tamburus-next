@@ -10,7 +10,6 @@ export function preloadImage(url) {
   });
 }
 
-
 export function initPageOpenAnimation() {
   const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
 
