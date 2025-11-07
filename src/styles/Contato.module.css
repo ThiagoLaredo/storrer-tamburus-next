@@ -5,7 +5,6 @@
   justify-content: center;
   padding: 2rem;
   background: #ffffff;
-  /* 🔥 Garante que o container ocupe todo o espaço disponível */
   width: 100%;
   box-sizing: border-box;
 }
@@ -13,10 +12,9 @@
 .contatoContent {
   display: flex;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1200px; /* 🔥 APENAS PARA DESKTOP */
   gap: 60px;
   margin: 0 auto;
-  /* 🔥 Centraliza o conteúdo verticalmente se necessário */
   align-items: center;
 }
 
@@ -48,17 +46,17 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
-  position: relative; /* Necessário para posicionar o pseudo-elemento */
-  display: inline-block; /* Faz o sublinhado acompanhar apenas o texto */
+  position: relative;
+  display: inline-block;
 }
 
 .contatoInfo h3::before {
   content: '';
   position: absolute;
   width: 100%;
-  height: 2px; /* Espessura do sublinhado */
+  height: 2px;
   background-color: var(--amarelo);
-  bottom: -4px; /* Ajuste fino para posicionamento abaixo do texto */
+  bottom: -4px;
   left: 0;
 }
 
@@ -134,32 +132,34 @@
   transform: translateY(-2px);
 }
 
-/* Responsive */
+/* 🔥 RESPONSIVE - CORRIGIDO */
 @media (max-width: 768px) {
   .contatoContainer {
     padding: 100px 1rem 40px;
     min-height: calc(100vh - 120px);
+    align-items: flex-start; /* 🔥 MUDEI PARA FLEX-START */
   }
   
   .contatoContent {
     flex-direction: column;
     gap: 40px;
+    max-width: 100%; /* 🔥 CORREÇÃO PRINCIPAL - REMOVE MAX-WIDTH */
+    margin: 0; /* 🔥 REMOVE MARGIN AUTO */
   }
 
-.contatoItem {
-  margin-bottom: 1.5rem;
-}
+  .contatoItem {
+    margin-bottom: 1.5rem;
+  }
 
-
-.contatoItem:last-child {
-  margin-bottom: 0;
-}
+  .contatoItem:last-child {
+    margin-bottom: 0;
+  }
   
   .contatoInfo {
     padding-right: 0;
     border-right: none;
-    /* border-bottom: 1px solid #eee; */
     text-align: center;
+    width: 100%; /* 🔥 GARANTE 100% DE LARGURA */
   }
 
   .contatoInfo h2 {
@@ -171,15 +171,19 @@
   }
   
   .contatoForm {
-    max-width: 100%;
+    max-width: 100%; /* 🔥 JÁ ESTAVA CORRETO */
+    width: 100%; /* 🔥 ADICIONEI PARA GARANTIR */
   }
   
   .submitButton {
-    width: 100%;
+    width: 100%; /* 🔥 JÁ ESTAVA CORRETO */
   }
 }
 
 @media (max-width: 480px) {
+  .contatoContainer {
+    padding: 100px 1rem 40px; /* 🔥 PADDING LATERAL MENOR */
+  }
   
   .contatoInfo h2 {
     font-size: 1.8rem;
@@ -197,5 +201,37 @@
   .submitButton {
     padding: 15px 30px;
     font-size: 1rem;
+  }
+}
+
+/* 🔥 SOLUÇÃO ALTERNATIVA MAIS FORTE */
+@media (max-width: 768px) {
+  .formGroup {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .formGroup input {
+    text-align: center !important;
+  }
+  
+  .formGroup input::placeholder {
+    text-align: center !important;
+  }
+  
+  /* 🔥 Para o label animado */
+  .formGroup label {
+    transform: translateX(0);
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+  }
+  
+  .formGroup input:focus ~ label,
+  .formGroup input:not(:placeholder-shown) ~ label {
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
   }
 }

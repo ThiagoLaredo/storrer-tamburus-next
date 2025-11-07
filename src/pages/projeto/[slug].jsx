@@ -1,9 +1,4 @@
-// 
-
-
-// src/pages/projeto/[slug].jsx
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import { getProjetoBySlug, getAllProjetosSlugs, getTiposProjeto } from '@/services/contentful/projetos';
@@ -14,7 +9,6 @@ export default function ProjetoPage({ projeto, tipos }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Controle de loading para mudanças de rota
   useEffect(() => {
     const handleStart = () => setIsLoading(true);
     const handleComplete = () => setIsLoading(false);
@@ -38,7 +32,34 @@ export default function ProjetoPage({ projeto, tipos }) {
     }
   };
 
-  // Loading durante fallback ou transições
+  // Geração das meta tags dinâmicas
+  const generateMetaDescription = () => {
+    if (!projeto) return 'Projeto Storrer Tamburus - Arquitetura e Design';
+    
+    const { titulo, tipoDoProjeto, descricaoBreve } = projeto.fields;
+    const tipoNome = tipoDoProjeto?.fields?.nome || 'Projeto';
+    
+    if (descricaoBreve) {
+      return descricaoBreve;
+    }
+    
+    return `Confira ${titulo}, um ${tipoNome.toLowerCase()} desenvolvido pela Storrer Tamburus. Arquitetura, design e inovação em cada projeto.`;
+  };
+
+  const getImageUrl = () => {
+    if (!projeto) return '/default-og-image.jpg';
+
+    const { galeriaDeImagens, capa } = projeto.fields;
+    
+    if (galeriaDeImagens && galeriaDeImagens.length > 0) {
+      return `https:${galeriaDeImagens[0].fields.file.url}`;
+    } else if (capa) {
+      return `https:${capa.fields.file.url}`;
+    }
+    
+    return '/default-og-image.jpg';
+  };
+
   if (router.isFallback || isLoading) {
     return <Loader />;
   }
@@ -52,6 +73,10 @@ export default function ProjetoPage({ projeto, tipos }) {
   }
 
   const { titulo, galeriaDeImagens, tipoDoProjeto } = projeto.fields;
+  const tipoNome = tipoDoProjeto?.fields?.nome || 'Projeto';
+  const metaDescription = generateMetaDescription();
+  const imageUrl = getImageUrl();
+  const url = `https://storrertamburus.com/projeto/${projeto.fields.slug}`;
 
   const getFiltroAtivo = () => {
     if (!tipoDoProjeto) return '';
@@ -63,26 +88,50 @@ export default function ProjetoPage({ projeto, tipos }) {
   const filtroAtivo = getFiltroAtivo();
 
   return (
-    <>
-      <Head>
-        <title>{titulo} | Storrer Tamburus</title>
-      </Head>
-
-      <MainLayout 
-        title={`${titulo} | Storrer Tamburus`}
-        hideNav={true}
-        showFilters={true}
-        tipos={tipos}
-        filtroAtivo={filtroAtivo}
-        onFiltroChange={handleFiltroChange}
-        hideFooter={false}
-      >
-        <ProjetoGallery 
-          imagens={galeriaDeImagens}
-          titulo={titulo}
-        />
-      </MainLayout>
-    </>
+    <MainLayout 
+      title={`${titulo} | Storrer Tamburus`}
+      description={metaDescription}
+      keywords={`${titulo}, ${tipoNome}, Storrer Tamburus, arquitetura, design, projeto, ${tipoNome.toLowerCase()}`}
+      image={imageUrl}
+      url={url}
+      hideNav={true}
+      showFilters={true}
+      tipos={tipos}
+      filtroAtivo={filtroAtivo}
+      onFiltroChange={handleFiltroChange}
+      hideFooter={false}
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": titulo,
+        "description": metaDescription,
+        "image": imageUrl,
+        "author": {
+          "@type": "Organization",
+          "name": "Storrer Tamburus",
+          "url": "https://storrertamburus.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Storrer Tamburus",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://storrertamburus.com/logo.png"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": url
+        },
+        "datePublished": projeto.sys?.createdAt || new Date().toISOString(),
+        "dateModified": projeto.sys?.updatedAt || new Date().toISOString()
+      }}
+    >
+      <ProjetoGallery 
+        imagens={galeriaDeImagens}
+        titulo={titulo}
+      />
+    </MainLayout>
   );
 }
 

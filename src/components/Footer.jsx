@@ -4,33 +4,45 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Footer.module.css";
 
-export default function Footer({ theme = 'dark' }) { // 🔥 NOVA PROP
+export default function Footer({ theme = 'dark' }) {
   const footerRef = useRef(null);
   const menuItemsRef = useRef([]);
   const instagramRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 }, delay: 1.5 });
+      // 🔥 TIMELINE MAIS RÁPIDA
+      const tl = gsap.timeline({ 
+        defaults: { 
+          ease: "power2.out", // 🔥 EASING MAIS RÁPIDO
+          duration: 0.6 // 🔥 DURAÇÃO REDUZIDA
+        }, 
+        delay: 0.8 // 🔥 DELAY REDUZIDO (era 1.5s)
+      });
 
-      gsap.set([menuItemsRef.current, instagramRef.current], { opacity: 0, y: 20 });
+      // 🔥 SET MAIS SIMPLES
+      gsap.set([...menuItemsRef.current.filter(Boolean), instagramRef.current], { 
+        opacity: 0, 
+        y: 15 // 🔥 MENOS MOVIMENTO
+      });
 
-      tl.to(menuItemsRef.current, {
+      // 🔥 ANIMAÇÃO MAIS RÁPIDA
+      tl.to(menuItemsRef.current.filter(Boolean), {
         opacity: 1,
         y: 0,
-        stagger: 0.15
+        stagger: 0.08 // 🔥 STAGGER MAIS RÁPIDO
       })
       .to(instagramRef.current, {
         opacity: 1,
         y: 0
-      }, "-=0.4");
+      }, "-=0.3"); // 🔥 OVERLAP MAIOR
+
     }, footerRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    // 🔥 Aplica a classe do tema
     <footer ref={footerRef} className={`${styles.footer} ${styles[theme]}`}>
       <div className={styles.footerContainer}>
         <nav className={styles.navFooter}>
