@@ -130,40 +130,6 @@ body {
   width: 100%;
 }
 
-/* Link do projeto */
-.projeto-link {
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  z-index: 3;
-  text-align: center;
-  width: 100%;
-  color: white;
-  text-decoration: none;
-  display: inline-block;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Título do projeto */
-.projetos-titulo {
-  font-size: 3rem;
-  line-height: 1.2;
-  font-weight: 300;
-  color: white;
-}
-
-/* Ícone plus */
-.projeto-plus {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
 
 /* Pagination vertical */
 .projetos-swiper .swiper-pagination {
@@ -181,16 +147,3 @@ body {
   right: 15px !important 
 }
 
-.projetos-swiper .swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  background: white;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-
-.projetos-swiper .swiper-pagination-bullet-active {
-  opacity: 1;
-  background: var(--amarelo-escuro);
-  transform: scale(1.2);
-}
