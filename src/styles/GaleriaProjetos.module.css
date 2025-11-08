@@ -185,6 +185,11 @@
   .pagination {
     right: 1rem;
   }
+  .projetoPlus {
+    width: 20px;
+    height: 20px;
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 480px) {
