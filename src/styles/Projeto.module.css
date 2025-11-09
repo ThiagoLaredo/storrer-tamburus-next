@@ -177,8 +177,10 @@
 @media (max-width: 768px) {
   .projetoTitulo {
     left: 1rem;
-    bottom: 10%;
+    top: 50%; /* Centraliza o topo do elemento no meio da tela */
     gap: 0.75rem;
+    max-width: 220px;
+    min-height: fit-content;
   }
 
   .tituloBarra {
