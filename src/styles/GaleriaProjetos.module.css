@@ -176,13 +176,14 @@
   .projetoLink {
     left: 1rem;
     top: 50%; /* Centraliza o topo do elemento no meio da tela */
-    transform: translateY(-50%); /* Move o elemento para cima metade da própria altura */
     display: flex;
     gap: .3rem;
+    max-height: fit-content;
   }
 
   .projetosTitulo {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    max-width: 200px;
   }
 
   .pagination {
