@@ -1,42 +1,414 @@
 .sobreContainer {
   height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 10%;
+  padding: 0;
+  background: #fff;
   overflow: hidden;
-  background: #fff; /* Fundo branco */
+  position: relative;
+}
+
+.conteudoPrincipal {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  height: 100vh;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ========== GALERIA DESKTOP ========== */
+.galeria {
+  position: relative;
+  height: 100vh;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.galeriaContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* 🔥 AJUSTE: Empurra o conteúdo para baixo do header */
+  padding-top: 40px;
+  height: calc(100vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fotoContainer {
+  position: absolute;
+  top: 40px; /* 🔥 AJUSTE: Começa após o header */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 40px); /* 🔥 AJUSTE: Altura considerando header */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.fotoContainer.ativa {
+  opacity: 1;
+}
+
+.foto {
+  width: 100%;
+  height: 100%;
+  max-width: 400px;
+  max-height: 500px; /* 🔥 Reduzido para caber com header */
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  transition: transform 1s ease;
+}
+
+.fotoContainer.ativa .foto {
+  transform: scale(1);
+}
+
+.fotoContainer:not(.ativa) .foto {
+  transform: scale(0.95);
+}
+
+.legenda {
+  position: absolute;
+  bottom: 3rem; /* 🔥 AJUSTE: Posição relativa ao container reduzido */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 80%;
+  text-align: center;
+  white-space: normal;
+}
+
+.textoLegenda {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.indicadores {
+  position: absolute;
+  bottom: 1rem; /* 🔥 AJUSTE: Posição relativa ao container reduzido */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.indicador {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicador.ativo {
+  background: var(--amarelo-escuro);
+  transform: scale(1.2);
+}
+
+.indicador:hover {
+  background: var(--amarelo-escuro);
+}
+
+/* ========== CONTEÚDO DE TEXTO DESKTOP ========== */
+.textoContent {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  background: #fff;
+  /* 🔥 AJUSTE: Considera header */
+  padding-top: calc(2rem + 40px);
+  height: calc(100vh - 40px);
 }
 
 .titulo {
-  font-size: 3rem;
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
   font-weight: 300;
-  letter-spacing: 2px;
-  color: #333; /* Cinza escuro */
+  margin-bottom: 2rem;
+  color: #333;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+.tituloDestaque {
+  font-weight: 600;
+  color: var(--amarelo-escuro);
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.textoContainer {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
 }
 
 .texto {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #666; /* Cinza médio */
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #555;
 }
 
-@media (max-width: 768px) {
+/* Custom Scrollbar */
+.texto::-webkit-scrollbar {
+  width: 6px;
+}
 
+.texto::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.texto::-webkit-scrollbar-thumb {
+  background: var(--amarelo-escuro);
+  border-radius: 10px;
+}
+
+.texto::-webkit-scrollbar-thumb:hover {
+  background: var(--amarelo-escuro);
+}
+
+/* Elementos de Destaque */
+.destaque {
+  background: #fafafa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border-left: 4px solid var(--amarelo-escuro);
+}
+
+.destaque h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.destaque ul {
+  list-style: none;
+  padding: 0;
+}
+
+.destaque li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.destaque li::before {
+  content: "•";
+  color: var(--amarelo-escuro);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.filosofia {
+  text-align: center;
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+  border-radius: 12px;
+}
+
+.filosofia h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.pilares {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.pilar {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #666;
+  font-style: italic;
+}
+
+.manifesto {
+  background: #333;
+  color: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.manifesto p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.manifesto p:last-child {
+  margin-bottom: 0;
+}
+
+.assinatura {
+  font-weight: 600;
+  color: var(--amarelo-escuro);
+  font-size: 1.3rem;
+  margin-bottom: 0;
+}
+
+/* ========== APENAS AJUSTES MOBILE ========== */
+@media (max-width: 1024px) {
   .sobreContainer {
-    overflow: auto;
-    padding: 0 1rem;
     height: auto;
-    padding-top: 100px;
+    min-height: 100vh;
+    padding-top: 80px; /* Considera header fixo apenas no mobile */
+  }
+
+  .conteudoPrincipal {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .galeria {
+    height: 50vh;
+    min-height: 400px;
+    /* 🔥 RESET: Remove ajustes do desktop no mobile */
+    padding-top: 0;
+  }
+
+  .galeriaContainer {
+    /* 🔥 RESET: Remove ajustes do desktop no mobile */
+    padding-top: 0;
+    height: 100%;
+  }
+
+  .fotoContainer {
+    /* 🔥 RESET: Remove ajustes do desktop no mobile */
+    top: 0;
+    height: 100%;
+  }
+
+  .textoContent {
+    height: auto;
+    min-height: 50vh;
+    padding: 2rem 1.5rem;
+    /* 🔥 RESET: Remove ajustes do desktop no mobile */
+    padding-top: 2rem;
+    height: auto;
   }
 
   .titulo {
-    font-size: 1.5rem;
-    line-height: normal;
+    font-size: 2rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .sobreContainer {
+    padding-top: 70px;
+  }
+
+  .galeria {
+    height: 45vh;
+    min-height: 350px;
+  }
+
+  .textoContent {
+    padding: 2rem 1rem;
+  }
+
+  .titulo {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem
   }
 
   .texto {
     font-size: 1rem;
+    padding-right: 0.5rem;
+  }
+
+  .destaque,
+  .filosofia,
+  .manifesto {
+    padding: 1.5rem;
+  }
+
+  .pilares {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .foto {
+    max-width: 300px;
+    max-height: 400px;
+  }
+
+  .legenda {
+    padding: 0.8rem 1.5rem;
+    max-width: 100%;
+    width: 60%;
+  }
+
+  .textoLegenda {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sobreContainer {
+    padding-top: 60px;
+  }
+
+  .galeria {
+    height: 40vh;
+  }
+
+  .textoContent {
+    padding: 2rem 1rem;
+  }
+
+  .titulo {
+    font-size: 1.6rem;
+  }
+
+  .foto {
+    max-width: 250px;
+    max-height: 320px;
+  }
+
+  .legenda {
+    padding: 0.7rem 1.2rem;
+  }
+
+  .textoLegenda {
+    font-size: 0.8rem;
   }
 }
