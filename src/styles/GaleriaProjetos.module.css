@@ -201,3 +201,52 @@
     font-size: 1.5rem;
   }
 }
+
+/* styles/GaleriaProjetos.module.css */
+
+/* 🔥 CORREÇÕES ESPECÍFICAS PARA SAFARI */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+    .projetoImagem {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000;
+      perspective: 1000;
+    }
+    
+    .slide {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      isolation: isolate;
+    }
+    
+    .imageContainer {
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+    }
+    
+    /* 🔥 Previne flickering no Safari */
+    .galeriaProjetos {
+      -webkit-transform: translate3d(0, 0, 0);
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+}
+
+/* Loading states para Safari */
+.projetoImagem:not([src]) {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
