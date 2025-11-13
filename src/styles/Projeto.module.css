@@ -1,27 +1,28 @@
 /* ============ PROJECT TITLE STYLES ============ */
 .projetoTitulo {
-  position: fixed; /* 🔥 MUDADO para fixed - fica fixo na tela */
-  bottom: 1rem;
+  position: fixed;
   left: 1rem;
   color: var(--branco);
   font-size: 2rem;
   font-weight: 300;
   z-index: 100;
   display: flex;
-  align-items: center;
+  align-items: center; /* 🔥 Centraliza barra e texto verticalmente */
   gap: 1rem;
   pointer-events: none;
   z-index: 1;
+  /* 🔥 POSICIONAMENTO DESKTOP - na base */
+  bottom: 1rem;
+  top: auto;
 }
 
 .tituloBarra {
   display: inline-block;
   width: 0.25rem;
-  height: 100%;
-  min-height: 3rem;
+  height: 3rem;
   background: var(--amarelo);
   flex-shrink: 0;
-  transform: scaleY(0); /* 🔥 Começa invisível para animação */
+  transform: scaleY(0);
   transform-origin: bottom;
 }
 
@@ -30,8 +31,9 @@
   font-size: inherit;
   font-weight: inherit;
   line-height: 1.2;
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
-  opacity: 0; /* 🔥 Começa invisível para animação */
+  opacity: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ============ GALLERY STYLES ============ */
@@ -177,20 +179,26 @@
 @media (max-width: 768px) {
   .projetoTitulo {
     left: 1rem;
-    top: 50%; /* Centraliza o topo do elemento no meio da tela */
+    /* 🔥 CENTRALIZAÇÃO VERTICAL NO MOBILE */
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%); /* 🔥 Centraliza exatamente no meio */
     gap: 0.75rem;
     max-width: 220px;
-    min-height: fit-content;
+    align-items: center; /* 🔥 Garante alinhamento central */
   }
 
   .tituloBarra {
     width: 0.2rem;
-    min-height: 2.5rem;
+    height: 2.5rem;
+    /* 🔥 A barra já está centralizada por causa do align-items: center */
   }
 
   .tituloTexto {
     font-size: 1.5rem;
     line-height: 1.1;
+    hyphens: auto;
+    -webkit-hyphens: auto;
   }
 
   .pagination {
@@ -201,16 +209,66 @@
 @media (max-width: 480px) {
   .projetoTitulo {
     left: 1.2rem;
-    bottom: 10%;
+    /* 🔥 MANTÉM CENTRALIZAÇÃO VERTICAL */
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
     gap: 0.5rem;
+    max-width: 180px;
   }
 
-   .tituloTexto {
-    font-size: 1.5rem;
+  .tituloTexto {
+    font-size: 1.3rem;
+    line-height: 1.1;
   }
 
   .tituloBarra {
     width: 0.15rem;
-    min-height: 2rem;
+    height: 2rem;
+  }
+}
+
+/* 🔥 ADICIONADO: Correções específicas para Safari Mobile */
+@supports (-webkit-touch-callout: none) {
+  .projetoTitulo {
+    -webkit-transform: translateZ(0) translateY(-50%);
+    transform: translateZ(0) translateY(-50%);
+  }
+  
+  .tituloBarra {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* 🔥 ADICIONADO: Para telas muito pequenas */
+@media (max-width: 380px) {
+  .projetoTitulo {
+    left: 1rem;
+    max-width: 150px;
+  }
+  
+  .tituloTexto {
+    font-size: 1.1rem;
+  }
+  
+  .tituloBarra {
+    height: 1.8rem;
+  }
+}
+
+/* 🔥 ADICIONADO: Ajuste para landscape no mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .projetoTitulo {
+    top: 40%; /* 🔁 Um pouco mais acima em landscape */
+    max-width: 200px;
+  }
+  
+  .tituloTexto {
+    font-size: 1.2rem;
+  }
+  
+  .tituloBarra {
+    height: 2rem;
   }
 }
