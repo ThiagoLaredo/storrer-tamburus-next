@@ -227,8 +227,12 @@ export default function SwiperGallery({
     observeSlideChildren: !isSafari,
     resizeObserver: true,
     threshold: isSafari ? 15 : 5,
-    shortSwipes: false,
-    longSwipes: false,
+    // 🔥 CORREÇÃO: Ativar swipes para mobile
+    shortSwipes: true,
+    longSwipes: true,
+    touchRatio: 1,
+    touchAngle: 45,
+    grabCursor: true,
     className: styles.projetosSwiper
   };
 
