@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "convert:webp": "node scripts/convert-single.js",
+    "list:projects": "node scripts/list-projects.js",
+    "convert:all": "node scripts/convert-all.js"
   },
   "browserslist": {
     "production": [
@@ -31,6 +34,7 @@
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "sharp": "^0.34.5",
     "swiper": "^12.0.2"
   },
   "devDependencies": {
