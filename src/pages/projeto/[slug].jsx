@@ -76,7 +76,7 @@ export default function ProjetoPage({ projeto, tipos }) {
   const tipoNome = tipoDoProjeto?.fields?.nome || 'Projeto';
   const metaDescription = generateMetaDescription();
   const imageUrl = getImageUrl();
-  const url = `https://storrertamburus.com/projeto/${projeto.fields.slug}`;
+  const url = `https://storrertamburus.com.br/projeto/${projeto.fields.slug}`;
 
   const getFiltroAtivo = () => {
     if (!tipoDoProjeto) return '';
@@ -109,14 +109,14 @@ export default function ProjetoPage({ projeto, tipos }) {
         "author": {
           "@type": "Organization",
           "name": "Storrer Tamburus",
-          "url": "https://storrertamburus.com"
+          "url": "https://storrertamburus.com.br/"
         },
         "publisher": {
           "@type": "Organization",
           "name": "Storrer Tamburus",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://storrertamburus.com/logo.png"
+            "url": "https://storrertamburus.com.br/logo.png"
           }
         },
         "mainEntityOfPage": {
