@@ -52,7 +52,7 @@ export default function Contato() {
         "@type": "ContactPage",
         "name": "Página de Contato - Storrer Tamburus",
         "description": "Entre em contato com a Storrer Tamburus para orçamentos e informações sobre projetos de arquitetura.",
-        "url": "https://storrertamburus.com/contato",
+        "url": "https://storrertamburus.com.br/contato",
         "mainEntity": {
           "@type": "Organization",
           "name": "Storrer Tamburus",

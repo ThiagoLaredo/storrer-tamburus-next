@@ -8,7 +8,7 @@ export default function MainLayout({
   title = "Storrer Tamburus - Arquitetura e Design", 
   description = "Storrer Tamburus - Escritório de arquitetura e design. Projetos residenciais, comerciais e corporativos com inovação e excelência.",
   keywords = "arquitetura, design, Storrer Tamburus, projetos residenciais, arquitetura comercial, design de interiores, São Paulo",
-  image = "https://storrertamburus.com/default-og-image.jpg", // ✅ URL absoluta
+  image = "https://storrertamburus.com.br/default-og-image.jpg", // ✅ URL absoluta
   hideFooter = false,
   hideNav = false,
   showFilters = false,
@@ -25,7 +25,7 @@ export default function MainLayout({
   twitterCardType = "summary_large_image", // 🔥 NOVO
 }) {
   const router = useRouter();
-  const siteUrl = "https://storrertamburus.com";
+  const siteUrl = "https://storrertamburus.com.br/";
   
   // 🔥 CONSTRUIR URL COMPLETA DA IMAGEM
   const getFullImageUrl = (imgPath) => {

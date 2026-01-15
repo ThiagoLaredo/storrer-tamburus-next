@@ -83,7 +83,7 @@ export default function Sobre() {
       description="Conheça a trajetória da Storrer Tamburus Arquitetura. Fabio Storrer e Veridiana Tamburus unem expertise internacional e sensibilidade para criar projetos únicos que transformam espaços e vivências."
       keywords="arquitetura São Paulo, design de interiores, Storrer Tamburus, Fabio Storrer, Veridiana Tamburus, projeto arquitetônico, arquitetura comercial, arquitetura residencial, escritório de arquitetura"
       image="/sobre-og-image.jpg"
-      url="https://storrertamburus.com/sobre"
+      url="https://storrertamburus.com.br/sobre"
       theme="light"
       hideFooter={true}
       structuredData={{
@@ -91,13 +91,13 @@ export default function Sobre() {
         "@type": "AboutPage",
         "name": "Sobre - Storrer Tamburus Arquitetura",
         "description": "Conheça a história e filosofia da Storrer Tamburus Arquitetura, escritório referência em projetos arquitetônicos inovadores em São Paulo.",
-        "url": "https://storrertamburus.com/sobre",
+        "url": "https://storrertamburus.com.br/sobre",
         "publisher": {
           "@type": "Organization",
           "name": "Storrer Tamburus Arquitetura",
           "description": "Escritório de arquitetura e design especializado em projetos residenciais e comerciais de alto padrão",
-          "url": "https://storrertamburus.com",
-          "logo": "https://storrertamburus.com/logo.png",
+          "url": "https://storrertamburus.com.br/",
+          "logo": "https://storrertamburus.com.br/logo.png",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Avenida Faria Lima",
