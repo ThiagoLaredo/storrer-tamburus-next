@@ -3,7 +3,10 @@
   publish = ".next"
 
 [build.environment]
-NODE_VERSION = "18"
 
+NODE_VERSION = "18"
+CONTENTFUL_SPACE_ID = "xcps7qy8mp38"
+CONTENTFUL_ACCESS_TOKEN = "tiNcarfk_a8YwEAoNaKCKtNnQglytJd7qobm5JnlHP4"
+CONTENTFUL_ENVIRONMENT = "master"
 [[plugins]]
   package = "@netlify/plugin-nextjs"
