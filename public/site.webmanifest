@@ -1,0 +1,16 @@
+{
+  "name": "Storrer Tamburus - Arquitetura e Design",
+  "short_name": "Storrer Tamburus",
+  "description": "Escritório de arquitetura e design em São Paulo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/images/favicon/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

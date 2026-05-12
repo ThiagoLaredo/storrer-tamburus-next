@@ -1,0 +1,231 @@
+// import { useRouter } from 'next/router';
+// import Head from 'next/head';
+// import { useEffect } from 'react'; // 🔥 ADICIONE ESTA IMPORT
+// import GaleriaProjetos from '@/components/GaleriaProjetos';
+// import styles from '@/styles/Projetos.module.css';
+// import { getAllProjetos, getTiposProjeto } from '@/services/contentful/projetos';
+// import MainLayout from "@/layouts/MainLayout";
+
+// export default function ProjetosFiltroPage({ projetos, tipos, filtroSlug }) {
+//   const router = useRouter();
+
+//   // 🔥 VERIFICAÇÃO DE SEGURANÇA - se por algum motivo não for comercial, redireciona
+//   useEffect(() => {
+//     if (router.isReady && filtroSlug !== 'comercial' && router.asPath === '/projetos/') {
+//       router.replace('/projetos/comercial/');
+//     }
+//   }, [router.isReady, filtroSlug, router]);
+
+//   if (router.isFallback) {
+//     return <div>Carregando...</div>;
+//   }
+
+//   const handleFiltroChange = (novoFiltro) => {
+//     if (novoFiltro === 'todos') {
+//       router.push('/projetos/');
+//     } else {
+//       router.push(`/projetos/${novoFiltro}/`);
+//     }
+//   };
+
+//   const projetosFiltrados = projetos.filter(projeto => 
+//     projeto.tipoSlug === filtroSlug
+//   );
+
+//   const tipoAtivo = tipos.find(tipo => tipo.slug === filtroSlug);
+//   const pageTitle = `${tipoAtivo?.nome || 'Projetos'} | Storrer Tamburus`;
+
+//   return (
+//     <>
+//       <Head>
+//         <title>{pageTitle}</title>
+//         <meta name="description" content={`Confira nossos projetos de ${tipoAtivo?.nome.toLowerCase() || 'arquitetura'}.`} />
+//       </Head>
+
+//       <MainLayout 
+//         title={pageTitle}
+//         hideNav={true}
+//         showFilters={true}
+//         tipos={tipos}
+//         filtroAtivo={filtroSlug}
+//         onFiltroChange={handleFiltroChange}
+//         hideFooter={false}
+//       >
+//         <main className={styles.projetosPage}>
+//           <GaleriaProjetos projetos={projetosFiltrados} />
+//         </main>
+//       </MainLayout>
+//     </>
+//   );
+// }
+
+// export async function getStaticPaths() {
+//   const tipos = await getTiposProjeto();
+  
+//   const paths = tipos.map((tipo) => ({
+//     params: { filtro: [tipo.slug] },
+//   }));
+
+//   // 🔥 ADICIONE o path vazio para capturar /projetos/
+//   paths.push({ 
+//     params: { filtro: [] } 
+//   });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+// export async function getStaticProps({ params }) {
+//   const [projetos, tipos] = await Promise.all([
+//     getAllProjetos(),
+//     getTiposProjeto()
+//   ]);
+
+//   // 🔥 FORÇA comercial como padrão em TODAS as situações
+//   let filtroSlug = 'comercial'; // 🔥 VALOR PADRÃO
+
+//   // Se veio um filtro na URL, usa ele
+//   if (params.filtro && params.filtro.length > 0) {
+//     filtroSlug = params.filtro[0];
+//   }
+
+//   // 🔥 VERIFICA se o filtro é válido, se não for, força comercial
+//   const filtroValido = tipos.find(tipo => tipo.slug === filtroSlug);
+//   if (!filtroValido) {
+//     filtroSlug = 'comercial';
+//   }
+
+//   return {
+//     props: {
+//       projetos,
+//       tipos,
+//       filtroSlug, // 🔥 SEMPRE será comercial ou um filtro válido
+//     },
+//     revalidate: 60,
+//   };
+// }
+
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import Head from 'next/head';
+import MainLayout from '@/layouts/MainLayout';
+import GaleriaProjetos from '@/components/GaleriaProjetos';
+import { getAllProjetos, getTiposProjeto } from '@/services/contentful/projetos';
+
+export default function ProjetosFiltroPage({ projetos, tipos, filtroSlug }) {
+  const router = useRouter();
+
+  // 🔥 VERIFICAÇÃO DE SEGURANÇA - redireciona se necessário
+  useEffect(() => {
+    if (router.isReady && filtroSlug !== 'comercial' && router.asPath === '/projetos/') {
+      router.replace('/projetos/comercial/');
+    }
+  }, [router.isReady, filtroSlug, router]);
+
+  if (router.isFallback) {
+    return <div>Carregando...</div>;
+  }
+
+  const handleFiltroChange = (novoFiltro) => {
+    router.push(`/projetos/${novoFiltro}/`);
+  };
+
+  // 🔥 FILTRA OS PROJETOS - usa tipoSlug que já vem processado do serviço
+  const projetosFiltrados = projetos.filter(projeto => 
+    projeto.tipoSlug === filtroSlug
+  );
+
+  const tipoAtivo = tipos.find(tipo => tipo.slug === filtroSlug);
+  const pageTitle = `${tipoAtivo?.nome || 'Projetos'} | Storrer Tamburus`;
+
+  return (
+    <>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={`Confira nossos projetos de ${tipoAtivo?.nome.toLowerCase() || 'arquitetura'}.`} />
+      </Head>
+
+      <MainLayout 
+        title={pageTitle}
+        hideNav={true}
+        showFilters={true}
+        tipos={tipos}
+        filtroAtivo={filtroSlug}
+        onFiltroChange={handleFiltroChange}
+        hideFooter={false}
+      >
+        <GaleriaProjetos projetos={projetosFiltrados} />
+      </MainLayout>
+    </>
+  );
+}
+
+export async function getStaticPaths() {
+  try {
+    const tipos = await getTiposProjeto();
+    
+    const paths = tipos.map((tipo) => ({
+      params: { filtro: [tipo.slug] },
+    }));
+
+    // 🔥 ADICIONE o path do filtro padrão
+    paths.push({ 
+      params: { filtro: ['comercial'] } 
+    });
+
+    return {
+      paths,
+      fallback: false,
+    };
+  } catch (error) {
+    console.error('Erro em getStaticPaths:', error);
+    return {
+      paths: [{ params: { filtro: ['comercial'] } }],
+      fallback: false,
+    };
+  }
+}
+
+export async function getStaticProps({ params }) {
+  try {
+    const [projetos, tipos] = await Promise.all([
+      getAllProjetos(),
+      getTiposProjeto()
+    ]);
+
+    // 🔥 FORÇA comercial como padrão em TODAS as situações
+    let filtroSlug = 'comercial'; // 🔥 VALOR PADRÃO
+
+    // Se veio um filtro na URL, usa ele
+    if (params.filtro && params.filtro.length > 0) {
+      filtroSlug = params.filtro[0];
+    }
+
+    // 🔥 VERIFICA se o filtro é válido, se não for, força comercial
+    const filtroValido = tipos.find(tipo => tipo.slug === filtroSlug);
+    if (!filtroValido) {
+      filtroSlug = 'comercial';
+    }
+
+    return {
+      props: {
+        projetos, // 🔥 Já vem com tipoSlug processado do serviço
+        tipos,
+        filtroSlug, // 🔥 SEMPRE será comercial ou um filtro válido
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error('Erro em getStaticProps:', error);
+    return {
+      props: {
+        projetos: [],
+        tipos: [],
+        filtroSlug: 'comercial'
+      },
+      revalidate: 60,
+    };
+  }
+}

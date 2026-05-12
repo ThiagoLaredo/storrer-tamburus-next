@@ -1,0 +1,237 @@
+.contatoContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contatoContent {
+  display: flex;
+  width: 100%;
+  max-width: 1200px; /* 🔥 APENAS PARA DESKTOP */
+  gap: 60px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Informações de Contato - 1/3 (lado esquerdo) */
+.contatoInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 40px;
+  border-right: 1px solid #eee;
+}
+
+.contatoInfo h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: 300;
+  color: #333333;
+}
+
+.contatoItem {
+  margin-bottom: 2.5rem;
+}
+
+.contatoItem h3 {
+  font-size: .8rem;
+  margin-bottom: 0.5rem;
+  color: #666666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+
+.contatoInfo h3::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--amarelo);
+  bottom: -4px;
+  left: 0;
+}
+
+.contatoItem p {
+  font-size: 1.3rem;
+  color: #333333;
+}
+
+/* Formulário - 2/3 (lado direito) */
+.contatoForm {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.formGroup {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 15px 0;
+  font-size: 1.1rem;
+  border: none;
+  border-bottom: 1px solid #dddddd;
+  outline: none;
+  background: transparent;
+  transition: border-color 0.3s ease;
+  color: #333333;
+}
+
+.formGroup input:focus {
+  border-bottom-color: #333333;
+}
+
+.formGroup label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  font-size: 1.1rem;
+  color: #999999;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.formGroup input:focus ~ label,
+.formGroup input:not(:placeholder-shown) ~ label {
+  top: -10px;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.submitButton {
+  background-color: var(--amarelo);
+  color: #000000;
+  border: none;
+  padding: 16px 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.submitButton:hover {
+  background-color: var(--amarelo-escuro);
+  transform: translateY(-2px);
+}
+
+/* 🔥 RESPONSIVE - CORRIGIDO */
+@media (max-width: 768px) {
+  .contatoContainer {
+    padding: 100px 1rem 40px;
+    min-height: calc(100vh - 120px);
+    align-items: flex-start; /* 🔥 MUDEI PARA FLEX-START */
+  }
+  
+  .contatoContent {
+    flex-direction: column;
+    gap: 40px;
+    max-width: 100%; /* 🔥 CORREÇÃO PRINCIPAL - REMOVE MAX-WIDTH */
+    margin: 0; /* 🔥 REMOVE MARGIN AUTO */
+  }
+
+  .contatoItem {
+    margin-bottom: 1.5rem;
+  }
+
+  .contatoItem:last-child {
+    margin-bottom: 0;
+  }
+  
+  .contatoInfo {
+    padding-right: 0;
+    border-right: none;
+    text-align: center;
+    width: 100%; /* 🔥 GARANTE 100% DE LARGURA */
+  }
+
+  .contatoInfo h2 {
+    margin-bottom: 2rem;
+  }
+  
+  .contatoInfo h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .contatoForm {
+    max-width: 100%; /* 🔥 JÁ ESTAVA CORRETO */
+    width: 100%; /* 🔥 ADICIONEI PARA GARANTIR */
+  }
+  
+  .submitButton {
+    width: 100%; /* 🔥 JÁ ESTAVA CORRETO */
+  }
+}
+
+@media (max-width: 480px) {
+  .contatoContainer {
+    padding: 100px 1rem 40px; /* 🔥 PADDING LATERAL MENOR */
+  }
+  
+  .contatoInfo h2 {
+    font-size: 1.8rem;
+  }
+  
+  .contatoItem p {
+    font-size: 1.1rem;
+  }
+  
+  .formGroup input {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+  
+  .submitButton {
+    padding: 15px 30px;
+    font-size: 1rem;
+  }
+}
+
+/* 🔥 SOLUÇÃO ALTERNATIVA MAIS FORTE */
+@media (max-width: 768px) {
+  .formGroup {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .formGroup input {
+    text-align: center !important;
+  }
+  
+  .formGroup input::placeholder {
+    text-align: center !important;
+  }
+  
+  /* 🔥 Para o label animado */
+  .formGroup label {
+    transform: translateX(0);
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+  }
+  
+  .formGroup input:focus ~ label,
+  .formGroup input:not(:placeholder-shown) ~ label {
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+}

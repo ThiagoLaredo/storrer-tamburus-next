@@ -1,0 +1,269 @@
+/* ============ PROJECT TITLE STYLES ============ */
+.projetoTitulo {
+  position: fixed;
+  left: 1rem;
+  color: var(--branco);
+  font-size: 2rem;
+  font-weight: 300;
+  z-index: 100;
+  display: flex;
+  align-items: center; /* 🔥 Centraliza barra e texto verticalmente */
+  gap: 1rem;
+  pointer-events: none;
+  z-index: 1;
+  /* 🔥 POSICIONAMENTO DESKTOP - na base */
+  bottom: 1rem;
+  top: auto;
+}
+
+.tituloBarra {
+  display: inline-block;
+  width: 0.25rem;
+  height: 3rem;
+  background: var(--amarelo);
+  flex-shrink: 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.tituloTexto {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  opacity: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ============ GALLERY STYLES ============ */
+.galleryWrapper {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.projetoSlide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.imageContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.projetoImagem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* ============ PAGINATION ============ */
+.pagination {
+  position: absolute;
+  right: 2rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 10;
+}
+
+.bullet {
+  background: rgba(255, 255, 255, 0.5);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 1;
+  transition: background 0.3s;
+}
+
+.bulletActive {
+  background: var(--amarelo);
+}
+
+/* ============ LOADING & ERROR STATES ============ */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--preto);
+}
+
+.loadingSpinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid transparent;
+  border-top: 3px solid var(--amarelo);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--preto);
+  color: var(--branco);
+  text-align: center;
+  padding: 2rem;
+}
+
+.error h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--branco);
+}
+
+.error p {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.backButton {
+  background: var(--amarelo);
+  color: var(--preto);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: var(--branco);
+  transform: translateY(-2px);
+}
+
+.noImages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--preto);
+  color: var(--branco);
+  font-size: 1.125rem;
+}
+
+/* ============ RESPONSIVE ADJUSTMENTS ============ */
+@media (max-width: 768px) {
+  .projetoTitulo {
+    left: 1rem;
+    /* 🔥 CENTRALIZAÇÃO VERTICAL NO MOBILE */
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%); /* 🔥 Centraliza exatamente no meio */
+    gap: 0.75rem;
+    max-width: 220px;
+    align-items: center; /* 🔥 Garante alinhamento central */
+  }
+
+  .tituloBarra {
+    width: 0.2rem;
+    height: 2.5rem;
+    /* 🔥 A barra já está centralizada por causa do align-items: center */
+  }
+
+  .tituloTexto {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  .pagination {
+    right: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .projetoTitulo {
+    left: 1.2rem;
+    /* 🔥 MANTÉM CENTRALIZAÇÃO VERTICAL */
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    gap: 0.5rem;
+    max-width: 180px;
+  }
+
+  .tituloTexto {
+    font-size: 1.3rem;
+    line-height: 1.1;
+  }
+
+  .tituloBarra {
+    width: 0.15rem;
+    height: 2rem;
+  }
+}
+
+/* 🔥 ADICIONADO: Correções específicas para Safari Mobile */
+@supports (-webkit-touch-callout: none) {
+  .projetoTitulo {
+    -webkit-transform: translateZ(0) translateY(-50%);
+    transform: translateZ(0) translateY(-50%);
+  }
+  
+  .tituloBarra {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* 🔥 ADICIONADO: Para telas muito pequenas */
+@media (max-width: 380px) {
+  .projetoTitulo {
+    left: 1rem;
+    max-width: 150px;
+  }
+  
+  .tituloTexto {
+    font-size: 1.1rem;
+  }
+  
+  .tituloBarra {
+    height: 1.8rem;
+  }
+}
+
+/* 🔥 ADICIONADO: Ajuste para landscape no mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .projetoTitulo {
+    top: 40%; /* 🔁 Um pouco mais acima em landscape */
+    max-width: 200px;
+  }
+  
+  .tituloTexto {
+    font-size: 1.2rem;
+  }
+  
+  .tituloBarra {
+    height: 2rem;
+  }
+}
